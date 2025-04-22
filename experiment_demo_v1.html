@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visual Search Experiment</title>
+  <!-- jsPsych stylesheet -->
+  <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <!-- Google Fonts & Feather Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --brand-primary: #4a90e2;
+      --brand-secondary: #f5a623;
+      --bg-gradient: linear-gradient(135deg, #1f2733, #323a45);
+      --font-heading: 'Poppins', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    body {
+      background: var(--bg-gradient);
+      color: #eceff4;
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      color: var(--brand-secondary);
+      margin-bottom: 0.5em;
+    }
+    .jspsych-content-wrapper {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .jspsych-btn {
+      transition: transform 150ms ease, background-color 150ms ease;
+      border-radius: 6px;
+    }
+    .jspsych-btn:hover {
+      transform: scale(1.05);
+      background-color: var(--brand-secondary);
+      color: #fff;
+    }
+    .jspsych-btn:active {
+      transform: scale(0.95);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .jspsych-btn:focus {
+      outline: 3px solid var(--brand-secondary);
+    }
+    @media (max-width: 600px) {
+      .jspsych-content-wrapper { margin: 1rem; padding: 1rem; }
+      .jspsych-btn { width: 40px; height: 40px; font-size: 1.5rem; }
+      .jspsych-html-button-response-container { grid-template-columns: repeat(auto-fit, minmax(40px,1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" loop src="https://example.com/ambient.mp3"></audio>
+  <script type="module">
+    import { initJsPsych } from 'https://esm.sh/jspsych@8.2.1';
+    import htmlKeyboardResponse from 'https://esm.sh/@jspsych/plugin-html-keyboard-response@2.1.0';
+    import surveyHtmlForm from 'https://esm.sh/@jspsych/plugin-survey-html-form@2.1.0';
+    import htmlButtonResponse from 'https://esm.sh/@jspsych/plugin-html-button-response@2.1.0';
+    import callFunction from 'https://esm.sh/@jspsych/plugin-call-function@2.1.0';
+
+    // Disable find & context menu
+    document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') e.preventDefault(); });
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Session ID for concurrency
+    const sessionID = Date.now().toString() + '-' + Math.floor(Math.random()*1000000);
+    let dataSaved = false;
+
+    // Safe POST for data
+    async function postData(url, payload) {
+      try {
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error('Save error', err);
+      }
+    }
+
+    // HTML escaping to prevent injection
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // Internationalization strings
+    const i18n = {
+      en: {
+        languagePrompt: "Choose your language:",
+        welcome: "Welcome to the Visual Search Experiment",
+        begin: "Press any key to begin.",
+        reactionInstr: "You'll see a '+' then a green 'X'. Press SPACE when you see 'X'.",
+        findT: "Find the letter <strong>T</strong>",
+        ready: "Press any key when ready.",
+        avgRT: l => `Your avg. reaction time: <strong>${l} ms</strong>`,
+        avgSearch: (rt, acc) => `
+          <h3>Search Summary</h3>
+          <p>Avg RT: <strong>${rt} ms</strong></p>
+          <p>Accuracy: <strong>${acc}%</strong></p>
+          <p>Press any key to continue.</p>
+        `,
+        exampleIntro: "Here's a 4×4 example (black letters)",
+        break: "Take a quick break! Press any key to continue.",
+        correct: "✅ Correct!",
+        incorrect: "❌ Incorrect",
+        thanks: "Thank you! Press Submit to finish.",
+        endMessage: "Thank you for completing the experiment. You may now close this page."
+      },
+      lv: {
+        languagePrompt: "Izvēlieties valodu:",
+        welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
+        begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
+        reactionInstr: "Jūs redzēsiet '+' un pēc tam zaļu 'X'. Nospiediet ATSTARPI, kad redzat 'X'.",
+        findT: "Atrodiet burtu <strong>T</strong>",
+        ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
+        avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
+        avgSearch: (rt, acc) => `
+          <h3>Meklēšanas kopsavilkums</h3>
+          <p>Vid. RT: <strong>${rt} ms</strong></p>
+          <p>Precizitāte: <strong>${acc}%</strong></p>
+          <p>Nospiediet jebkuru taustiņu, lai turpinātu.</p>
+        `,
+        exampleIntro: "4×4 piemērs (melni burti).",
+        break: "Īsa pauze! Nospiediet jebkuru taustiņu.",
+        correct: "✅ Pareizi!",
+        incorrect: "❌ Nepareizi",
+        thanks: "Paldies! Nospiediet Submit, lai pabeigtu.",
+        endMessage: "Paldies, ka piedalījāties! Jūs varat aizvērt šo lapu."
+      }
+    };
+
+    let lang = 'en';
+    const jsPsych = initJsPsych({
+      data: { sessionID },
+      show_progress_bar: true,
+      auto_update_progress_bar: true,
+      on_start: () => {
+        document.getElementById('bgm')?.play().catch(() => {});
+        feather.replace();
+      },
+      on_finish: () => jsPsych.data.get().localSave('csv', 'data.csv'),
+      plugins: { htmlKeyboardResponse, surveyHtmlForm, htmlButtonResponse, callFunction }
+    });
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    // Trial to save data
+    const saveData = {
+      type: callFunction,
+      func: () => {
+        const allData = jsPsych.data.get().addProperties({ lang }).values();
+        postData('YOUR_WEB_APP_URL_HERE', { sessionID, data: allData });
+      }
+    };
+
+    // Language selection screen
+    const languageScreen = {
+      type: surveyHtmlForm,
+      preamble: `<h3>${i18n.en.languagePrompt} / ${i18n.lv.languagePrompt}</h3>`,
+      html: `
+        <p><label><input type="radio" name="lang" value="en" checked> English</label></p>
+        <p><label><input type="radio" name="lang" value="lv"> Latviešu</label></p>
+      `,
+      on_finish: data => {
+        lang = data.response.lang;
+        jsPsych.data.addProperties({ lang });
+      }
+    };
+
+    // Welcome screen
+    const welcome = {
+      type: htmlKeyboardResponse,
+      stimulus: () => `<h2>${i18n[lang].welcome}</h2><p>${i18n[lang].begin}</p>`,
+      choices: "ALL_KEYS"
+    };
+
+    // Demographics form
+    const demographics = {
+      type: surveyHtmlForm,
+      preamble: `<h3>Enter your info:</h3>`,
+      html: `
+        <p>Gender: <select name="gender" required>
+          <option value="" disabled selected>Select…</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+        </select></p>
+        <p>Age: <input name="age" type="number" min="18" max="99" required></p>
+        <p>Hobbies: <input name="hobbies" type="text" placeholder="e.g. reading" required></p>
+      `
+    };
+
+    // Reaction-time test
+    const reactionIntro = {
+      type: htmlKeyboardResponse,
+      stimulus: () => `<p>${i18n[lang].reactionInstr}</p><p>${i18n[lang].begin}</p>`,
+      choices: "ALL_KEYS"
+    };
+    const reactionCountdown = [3, 2, 1].map(n => ({
+      type: htmlKeyboardResponse,
+      stimulus: `<p>${n}</p>`, choices: [], trial_duration:1000
+    }));
+    const reactionFixation = {
+      type: htmlKeyboardResponse,
+      stimulus: '<div style="font-size:48px;">+</div>',
+      choices: 'NO_KEYS',
+      trial_duration: () => 500 + Math.random()*1000
+    };
+    const reactionTrial = {
+      type: htmlKeyboardResponse,
+      stimulus: '<div style="font-size:48px; color:green;">X</div>',
+      choices: [' '], trial_duration: null,
+      data: { trial_type: 'reaction' }
+    };
+    const reactionBlock = {
+      timeline: [reactionIntro, ...reactionCountdown, reactionFixation, reactionTrial],
+      repetitions: 3
+    };
+
+    // Baseline summary
+    const showBaseline = {
+      type: htmlKeyboardResponse,
+      stimulus: () => {
+        const recs = jsPsych.data.get().filter({trial_type:'reaction'}).values();
+        const rts = recs.map(r => r.rt);
+        const avg = rts.length ? (rts.reduce((a,b)=>a+b)/rts.length).toFixed(2) : 'N/A';
+        return `<p>${i18n[lang].avgRT(avg)}</p><p>${i18n[lang].begin}</p>`;
+      },
+      choices: "ALL_KEYS"
+    };
+
+    // Build visual search segment
+    function makeSearchSegment(colors, size) {
+      const total = size*size;
+      const targetIdx = Math.floor(Math.random()*total);
+      const choices = Array.from({length:total}, (_, i) => {
+        const isTarget = i===targetIdx;
+        const symbol = isTarget?'T':'L';
+        const rot = isTarget?0:pick([0,90,180,270]);
+        const col = pick(colors);
+        return `<span style="display:block;transform:rotate(${rot}deg);color:${col};font-size:20px;font-weight:bold;">${symbol}</span>`;
+      });
+
+      return [
+        { type: htmlKeyboardResponse, stimulus:`<p>${i18n[lang].findT}</p><p>${i18n[lang].ready}</p>`, choices:"ALL_KEYS" },
+        ...[3,2,1,'Go!'].map(x=>({type:htmlKeyboardResponse,stimulus:`<p>${x}</p>`,choices:[],trial_duration:1000})),
+        { type: htmlButtonResponse, stimulus:'', choices, button_layout:'grid', grid_columns:size,
+          on_finish: data => { data.correct = data.response === targetIdx; }
+        },
+        { type: htmlKeyboardResponse, stimulus: ()=>{
+            const last = jsPsych.data.get().last(1).values()[0];
+            return `<div class="animate__animated ${last.correct?'animate__zoomIn':'animate__shakeX'}">${last.correct?i18n[lang].correct:i18n[lang].incorrect}</div>`;
+          }, choices:'NO_KEYS', trial_duration:500
+        }
+      ];
+    }
+
+    const exampleIntro = { type: htmlKeyboardResponse, stimulus:`<p>${i18n[lang].exampleIntro}</p><p>${i18n[lang].begin}</p>`, choices:"ALL_KEYS" };
+    const exampleSegment = makeSearchSegment(['black'],4);
+
+    // Full search blocks
+    const searchSegments = [];
+    [['black'],['black','red'],['red','blue','green']].forEach(colors => {
+      [2,4,8].forEach(size => {
+        for(let i=0; i<3; i++) searchSegments.push(...makeSearchSegment(colors, size));
+        searchSegments.push({ type: htmlKeyboardResponse, stimulus:`<p>${i18n[lang].break}</p>`, choices:"ALL_KEYS" });
+      });
+    });
+
+    // Search summary
+    const showSearchSummary = {
+      type: htmlKeyboardResponse,
+      stimulus: () => {
+        const recs = jsPsych.data.get().filter({trial_type:'search'}).values();
+        const rts = recs.map(x=>x.rt);
+        const cor = recs.map(x=>x.correct?1:0);
+        const avg = rts.length?(rts.reduce((a,b)=>a+b)/rts.length).toFixed(2):'N/A';
+        const acc = cor.length?((cor.reduce((a,b)=>a+b)/cor.length)*100).toFixed(1):'N/A';
+        return i18n[lang].avgSearch(avg, acc);
+      },
+      choices: "ALL_KEYS"
+    };
+
+    const goodbye = { type: htmlButtonResponse, stimulus:`<h3>${i18n[lang].thanks}</h3>`, choices:['Submit'] };
+    const finalThanks = { type: htmlKeyboardResponse, stimulus: ()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS'};
+
+    // Run timeline
+    jsPsych.run([
+      languageScreen,
+      welcome,
+      demographics,
+      reactionBlock,
+      showBaseline,
+      exampleIntro,
+      ...exampleSegment,
+      ...searchSegments,
+      showSearchSummary,
+      saveData,
+      goodbye,
+      finalThanks
+    ]);
+  </script>
+</body>
+</html>
