@@ -165,7 +165,7 @@
       type: callFunction,
       func: () => {
         const payload = jsPsych.data.get().addProperties({lang, sessionID}).values();
-        fetch('https://script.google.com/macros/s/…/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbwvnL4F-YPz91fCQBozN6mKIEScDFj91vNJzprfbsWE/dev', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload[0] || payload)
