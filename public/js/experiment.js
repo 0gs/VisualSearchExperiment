@@ -40,7 +40,7 @@ const i18n = {
     break: "Take a quick break! Press any key to continue.",
     correct: "✅ Correct!",
     incorrect: "❌ Incorrect",
-    thanks: "Thank you! Press Submit to finish.",
+    thanks: "Thank you! Press Exit to finish.",
     endMessage: "Thank you for completing the experiment. You may now close this page."
   },
   lv: {
@@ -61,7 +61,7 @@ const i18n = {
     break: "Īsa pauze! Nospiediet jebkuru taustiņu.",
     correct: "✅ Pareizi!",
     incorrect: "❌ Nepareizi",
-    thanks: "Paldies! Nospiediet Submit, lai pabeigtu.",
+    thanks: "Paldies! Nospiediet Exit, lai pabeigtu eksperimentu.",
     endMessage: "Paldies, ka piedalījāties! Jūs varat aizvērt šo lapu."
   }
 };
@@ -229,7 +229,7 @@ const showSearchSummary = {
   choices: 'ALL_KEYS'
 };
 
-const goodbye    = { type: htmlButtonResponse, stimulus:`<h3>${i18n[lang].thanks}</h3>`, choices:['Submit'] };
+const goodbye    = { type: htmlButtonResponse, stimulus:`<h3>${i18n[lang].thanks}</h3>`, choices:['Exit'] };
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
 // ─── Step 2: Build payload inside saveData ─────
