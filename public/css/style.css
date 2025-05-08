@@ -1,0 +1,6 @@
+/* center the prompt (i.e. our extra button) */
+.jspsych-html-button-response-prompt {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
