@@ -10,36 +10,37 @@ if (isMobile) {
   const overlay = document.createElement('div');
   Object.assign(overlay.style, {
     position: 'fixed',
-    top: 0, left: 0, width: '100vw', height: '100vh',
-    backgroundColor: 'rgba(0,0,0,0.85)',
+    top: 0, left: 0,
+    width: '100vw', height: '100vh',
+    background: 'darkred',
     color: '#fff',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    zIndex: 9999,
     padding: '1rem',
-    fontSize: '1.25rem'
+    boxSizing: 'border-box',
+    zIndex: 9999,
+    fontFamily: 'Arial, sans-serif',
+    lineHeight: 1.2
   });
   overlay.innerHTML = `
-    <div>
-      <h2>Please switch to a desktop or laptop!</h2>
-      <h2 style="margin-top:0.5em;">Lūdzu pārejiet uz datoru vai portatīvo datoru!</h2>
-      <p>This experiment works best on a computer with keyboard and mouse.</p>
-      <p style="margin-top:0.5em;">Šis eksperiments vislabāk darbojas datorā ar klavietūru un peli.</p>
-      <button id="continueAnyway" style="
-        margin-top:1.5em;
-        padding:0.75rem 1.5rem;
-        font-size:1rem;
-        border:none;
-        border-radius:6px;
-        background:#4a90e2;
-        color:#fff;
-        cursor:pointer;
-      ">
-        Continue anyway / Turpināt
-      </button>
-    </div>`;
+  <h2 style="font-size: 50px; margin: 0.5em 0;">
+    Please, switch to a desktop or laptop!
+  </h2>
+  <h2 style="font-size: 50px; margin: 0.5em 0;">
+    Lūdzu, pāriet uz datoru vai laptopu!
+  </h2>
+  <p  style="font-size: 50px; margin: 1em 0;">
+  </p>
+  <p  style="font-size: 50px; margin: 0.5em 0;">
+    This experiment was designed for a computer with keyboard and mouse.
+  </p>
+  <p  style="font-size: 50px; margin: 0.5em 0;">
+    Šis eksperiments ir paredzēts datoram ar klavietūru un peli.
+  </p>
+`;
   document.body.appendChild(overlay);
 
   document.getElementById('continueAnyway')
@@ -68,7 +69,7 @@ const API  = '/api/participants'; // ← your Express endpoint
 
 const i18n = {
   en: {
-    languagePrompt: "Choose your language:",
+    languagePrompt: "Select your preferred language",
     welcome: "Welcome to the Visual Search Experiment",
     begin: "Press any key to begin.",
     reactionInstr: "You'll see a '+' then a green 'X'. Press SPACE when you see 'X'.",
@@ -86,13 +87,117 @@ const i18n = {
     correct: "✅ Correct!",
     incorrect: "❌ Incorrect",
     thanks: "Thank you! Press Exit to finish.",
-    endMessage: "Thank you for completing the experiment. You may now close this page."
+    endMessage: "Thank you for completing the experiment. You may now close this page.",
+    noT: "I can't find T",
+    mobileTitle: "Please switch to a desktop or laptop",
+    mobileDesc: "This experiment works best on a computer with a keyboard.",
+    mobileContinue: "Continue anyway",
+    demoTitle: "Enter your info:",
+    genderLabel: "Gender:",
+    genderFemale: "Female",
+    genderMale: "Male",
+    genderOther: "Other",
+    selectPlaceholder: "Select…",
+    ageLabel: "Age:",
+    hobbiesLabel: "Hobbies:",
+    hobbiesPlaceholder: "e.g. reading",
+    instructions: `
+      <h2>Welcome!</h2>
+      <p>You are invited to participate in a study for a Bachelor's thesis at [Your University].</p>
+      <h3>What will you do?</h3>
+      <ul>
+        <li>A simple reaction time test (press spacebar when you see "X").</li>
+        <li>A visual search task (find and click the letter "T").</li>
+      </ul>
+      <h3>How long will it take?</h3>
+      <p>Approximately 10–15 minutes.</p>
+      <h3>What device should you use?</h3>
+      <p>Please use a desktop or laptop computer. Mobile devices are not supported.</p>
+      <h3>Is your data anonymous?</h3>
+      <p>Yes. No personal information is collected. Only your reaction times and click accuracy are stored anonymously.</p>
+      <h3>IP Address Policy:</h3>
+      <p>(Optional – include only if you store IPs) To ensure participants only complete the experiment once, your IP address may be temporarily stored and deleted after data collection. It will not be connected to your reaction time or accuracy data.</p>
+      <h3>Your rights:</h3>
+      <p>Participation is voluntary. You can exit at any time by closing the window.</p>
+      <p>For questions, contact: [Your email]</p>
+    `,
+    continue: "Continue",
+    tooSoonTitle: "Too soon!",
+    tooSoonBody: "Please wait for the green “X” before responding.",
+    reactionProgress: "Reaction time test {done} / 5 completed.",
+    reactionReady: "Press any key when you’re ready for the next one.",
+    practiceTitle: "Practice Trials (3)",
+    practiceDesc: "These won’t be recorded.",
+    practiceDone: "Practice complete! The real test will start now.",
+    practiceContinue: "Press any key to continue.",
+    exit: "Exit",
+    titlePageTitle: "Experimental testing of a visual search digital environment",
+    titlePageWelcome: "Welcome! You are invited to participate in the research for a bachelor’s thesis by a 4th-year student in the “Computer Science” program at the University of Latvia.",
+    titlePageTasksHeading: "What tasks are planned?",
+    titlePageTasksList: [
+        "Reaction time test (press any key on the keyboard when you see the “X” symbol).",
+        "Visual search tasks (find and click on the “T” symbol)."
+      ],
+    titlePageDurationHeading: "How long will it take?",
+    titlePageDuration: "Approximately 10–20 minutes.",
+    titlePageDeviceHeading: "Which devices are supported?",
+    titlePageDevice: "Please use a desktop or laptop computer. Mobile devices are not supported.",
+    titlePageAnonymityHeading: "Are the collected data anonymous?",
+    titlePageAnonymity: "Yes. No personal data is recorded during the experiment. Only your survey responses and a summary of the tasks performed are saved anonymously.",
+    titlePageIPHeading: "IP Address Policy:",
+    titlePageIPDesc: "(Optional – include only if you store IP addresses) To ensure each participant completes the experiment only once, your IP address may be stored temporarily after data collection and then deleted. It will not be linked to your reaction time or accuracy data.",
+    titlePageRightsHeading: "Participation is voluntary!",
+    titlePageRights: "You may stop the experiment at any time by closing this window.",
+    titlePageContact: "For any questions, contact: georgssprucs@gmail.com",
+    feedbackPrompt:        "Please tell us how you found the experiment:",
+    feedbackRatingLabel:   "Overall, how easy/difficult was it?",
+    feedbackRating1:       "1 – Very difficult",
+    feedbackRating2:       "2 – Difficult",
+    feedbackRating3:       "3 – Okay",
+    feedbackRating4:       "4 – Easy",
+    feedbackRating5:       "5 – Very easy",
+    feedbackCommentsLabel: "Any comments or suggestions?",
+    submitFeedback:        "Submit Feedback",
+    feedbackTitle:             "Quick feedback",
+    feedbackDifficultyLabel:   "Rate task difficulty (1 = very easy, 5 = very hard)",
+    feedbackColorLabel:        "Which color combination was easiest for you?",
+    colorOptBlack:             "Black only",
+    colorOptRedBlack:          "Red Target – Black L’s",
+    colorOptBlueRedBlack:      "Blue Target – Red/Green L’s",
+    colorOptImpossible:        "Each symbol a different color",
+    feedbackCommentsLabel:     "Any comments or difficulties?",
+    submitFeedback:            "Submit Feedback",
+    agree:                     "I agree",
+    computerTimePrompt: "How much time do you spend at a computer/laptop daily?",
+    computerTimeOptions: [
+      "< 1 hour",
+      "1–2 hours",
+      "2–4 hours",
+      "4–6 hours",
+      "> 6 hours"
+    ],
+    residencePrompt: "Do you live in a city or outside?",
+    residenceCity: "City",
+    residenceOutside: "Outside city",
+        // Demographics prompts
+        genderPrompt:            "Please select your gender:",
+        female:                  "Female",
+        male:                    "Male",
+        other:                   "Other",
+    
+        agePrompt:               "Please enter your age:",
+    
+        hobbiesPrompt:           "Select up to three hobbies:",
+        hobbiesOtherPlaceholder: "If Other, please specify…",
+    
+        // Generic
+        continue:                "Continue"
   },
   lv: {
     languagePrompt: "Izvēlieties valodu:",
     welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
     begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
-    reactionInstr: "Jūs redzēsiet '+' un pēc tam zaļu 'X'. Nospiediet ATSTARPI, kad redzat 'X'.",
+    reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet ATSTARPI, kad redzat 'X'.",
     findT: "Atrodiet burtu <strong>T</strong>",
     ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
     avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
@@ -107,15 +212,117 @@ const i18n = {
     correct: "✅ Pareizi!",
     incorrect: "❌ Nepareizi",
     thanks: "Paldies! Nospiediet Exit, lai pabeigtu eksperimentu.",
-    endMessage: "Paldies, ka piedalījāties! Jūs varat aizvērt šo lapu."
+    endMessage: "Paldies, ka piedalījāties! Jūs varat aizvērt šo lapu.",
+    noT: "Es nevaru atrast T",
+    mobileTitle: "Lūdzu pārejiet uz datoru vai portatīvo datoru",
+    mobileDesc: "Šis eksperiments vislabāk darbojas datorā ar tastatūru.",
+    mobileContinue: "Turpināt",
+    demoTitle: "Ievadiet savu informāciju:",
+    genderLabel: "Dzimums:",
+    genderFemale: "Sieviete",
+    genderMale: "Vīrietis",
+    genderOther: "Cits",
+    selectPlaceholder: "Izvēlieties…",
+    ageLabel: "Vecums:",
+    hobbiesLabel: "Vaļasprieki:",
+    hobbiesPlaceholder: "piem., lasīšana",
+    instructions: `
+      <h2>Laipni lūdzam!</h2>
+      <p>Jūs esat uzaicināts piedalīties bakalaura darba pētījumā [Jūsu Universitāte].</p>
+      <h3>Kādi uzdevumi ir paredzēti?</h3>
+      <ul>
+        <li>Vienkāršs reakcijas laika tests (nospiediet atstarpes taustiņu, kad redzat “X”).</li>
+        <li>Vizuālās meklēšanas uzdevums (atrodiet un noklikšķiniet uz burtu “T”).</li>
+      </ul>
+      <h3>Cik ilgi tas prasīs?</h3>
+      <p>Aptuveni 10–15 minūtes.</p>
+      <h3>Kādu ierīci jums vajadzētu izmantot?</h3>
+      <p>Lūdzu, izmantojiet galda vai portatīvo datoru. Mobilās ierīces nav atbalstītas.</p>
+      <h3>Vai jūsu dati ir anonīmi?</h3>
+      <p>Jā. Netiek vākti personiski dati. Tiek anonīmi saglabāta tikai jūsu reakcijas laiks un klikšķu precizitāte.</p>
+      <h3>IP adreses politika:</h3>
+      <p>(Nav obligāti – iekļaujiet tikai, ja saglabājat IP adreses) Lai nodrošinātu, ka dalībnieki izpilda eksperimentu tikai vienu reizi, jūsu IP adrese var tikt īslaicīgi saglabāta pēc datu vākšanas un izdzēsta. Tā netiks sasaistīta ar jūsu reakcijas laika vai precizitātes datiem.</p>
+      <h3>Jūsu tiesības:</h3>
+      <p>Dalība ir brīvprātīga. Jūs varat iziet jebkurā laikā, aizverot logu.</p>
+      <p>Jautājumu gadījumā sazinieties: georgssprucs@gmail.com</p>
+    `,
+    continue: "Turpināt",
+    tooSoonTitle: "Pārāk agri!",
+    tooSoonBody: "Lūdzu, gaidiet zaļo “X” pirms atbildes.",
+    reactionProgress: "Reakcijas laika tests {done} / 5 pabeigts.",
+    reactionReady: "Nospiediet jebkuru taustiņu, kad esat gatavs nākamajam.",
+    practiceTitle: "Treniņu mēģinājumi (3)",
+    practiceDesc: "Šie netiks ierakstīti.",
+    practiceDone: "Prakse pabeigta! Tagad sāksies īstais tests.",
+    practiceContinue: "Nospiediet jebkuru taustiņu, lai turpinātu.",
+    exit: "Aizvērt",
+    titlePageTitle: "Vizuālās meklēšanas digitālas vides eksperimentāla testēšana",
+    titlePageWelcome: "Laipni lūdzam! Jūs esat aicināts piedalīties Latvijas Universitātes 'Datorzinātnes' 4. studiju kursa studenta bakalaura darba pētījumā .",
+    titlePageTasksHeading: "Kādi uzdevumi ir paredzēti?",
+    titlePageTasksList: [
+      "Reakcijas laika tests (nospiediet jebkuru klavietūras taustiņu, kad redzat simbolu “X”).",
+      "Vizuālās meklēšanas uzdevumi (atrodiet un noklikšķiniet uz simbola “T”)."
+    ],
+    titlePageDurationHeading: "Cik daudz laika tas aizņems?",
+    titlePageDuration: "Aptuveni 10–20 minūtes.",
+    titlePageDeviceHeading: "Kādām ierīcēm ir paredzēti šie uzdevumi?",
+    titlePageDevice: "Lūdzu, izmantojiet stacionāro datoru vai klēpjdatoru. Mobilās ierīces nav atbalstītas.",
+    titlePageAnonymityHeading: "Vai iegūtie dati ir anonīmi?",
+    titlePageAnonymity: "Jā. Eksperimenta laikā netiek saglabāti personas dati. Tiek anonīmi saglabātas tikai Jūst atbildes uz aptaujas jautājumiem un izpildīto uzdevumu pārskats.",
+    titlePageIPHeading: "IP adreses politika:",
+    titlePageIPDesc: "(Nav obligāti – iekļaujiet tikai, ja saglabājat IP adreses) Lai nodrošinātu, ka dalībnieki izpilda eksperimentu tikai vienu reizi, jūsu IP adrese var tikt īslaicīgi saglabāta pēc datu vākšanas un izdzēsta. Tā netiks sasaistīta ar jūsu reakcijas laika vai precizitātes datiem.",
+    titlePageRightsHeading: "Dalība ir brīvprātīga!",
+    titlePageRights: "Jūs varat pārtraukt eksperimentu jebkurā laikā, aizverot logu.",
+    titlePageContact: "Jautājumu gadījumā sazinieties: georgssprucs@gmail.com",
+    feedbackPrompt:        "Lūdzu, pastāstiet, kā jums patika eksperimenta norise:",
+    feedbackRatingLabel:   "Kopumā, cik viegls/grūts tas bija?",
+    feedbackRating1:       "1 – Ļoti grūti",
+    feedbackRating2:       "2 – Grūti",
+    feedbackRating3:       "3 – Vidēji",
+    feedbackRating4:       "4 – Viegli",
+    feedbackRating5:       "5 – Ļoti viegli",
+    feedbackCommentsLabel: "Komentāri vai ieteikumi?",
+    submitFeedback:        "Iesniegt atsauksmes",
+    feedbackTitle:             "Ātrās atsauksmes",
+    feedbackDifficultyLabel:   "Novērtējiet uzdevuma grūtību (1 = ļoti viegli, 5 = ļoti grūti)",
+    feedbackColorLabel:        "Kura krāsu kombinācija jums šķita vieglākā?",
+    colorOptBlack:             "Tikai melna",
+    colorOptRedBlack:          "Sarkans mērķis – melni L",
+    colorOptBlueRedBlack:      "Zils mērķis – sarkani/zaļi L",
+    colorOptImpossible:        "Katrs simbols citā krāsā",
+    feedbackCommentsLabel:     "Jebkādi komentāri vai grūtības?",
+    submitFeedback:            "Iesniegt atsauksmes",
+    agree:                     "Es piekrītu",
+    computerTimePrompt: "Cik laika dienā jūs pavadāt pie datora/portatīvā datora?",
+    computerTimeOptions: [
+      "< 1 stunda",
+      "1–2 stundas",
+      "2–4 stundas",
+      "4–6 stundas",
+      "> 6 stundas"
+    ],
+    residencePrompt: "Vai jūs dzīvojat pilsētā vai ārpus tās?",
+    residenceCity: "Pilsētā",
+    residenceOutside: "Ārpus pilsētas",
+    genderPrompt:            "Lūdzu norādiet savu dzimumu:",
+    female:                  "Sieviete",
+    male:                    "Vīrietis",
+    other:                   "Cits",
+
+    agePrompt:               "Lūdzu ievadiet savu vecumu:",
+
+    hobbiesPrompt:           "Izvēlieties līdz trim hobijiem:",
+    hobbiesOtherPlaceholder: "Ja “Cits”, lūdzu ievadiet…",
+
+    continue:                "Turpināt",
   }
 };
 
 // ─── Initialize jsPsych ─────────────────────────
 const jsPsych = initJsPsych({
   data: { sessionID },
-  show_progress_bar: true,
-  auto_update_progress_bar: true,
+  //show_progress_bar: true,
+  //auto_update_progress_bar: true,
   on_start: () => {
     document.getElementById('bgm')?.play().catch(() => {});
     feather.replace();
@@ -123,20 +330,48 @@ const jsPsych = initJsPsych({
   plugins: { htmlKeyboardResponse, surveyHtmlForm, htmlButtonResponse, callFunction }
 });
 
-// ─── Task definitions
 const languageScreen = {
   type: surveyHtmlForm,
-  data: { task: 'language' },          // ← added
+  data: { task: 'language' },
   preamble: `<h3>${i18n.en.languagePrompt} / ${i18n.lv.languagePrompt}</h3>`,
   html: `
     <p><label><input type="radio" name="lang" value="en" checked> English</label></p>
     <p><label><input type="radio" name="lang" value="lv"> Latviešu</label></p>
   `,
+  // force the button to read both English and Latvian
+  button_label: `${i18n.en.continue} / ${i18n.lv.continue}`,
   on_finish: data => {
     lang = data.response.lang;
     jsPsych.data.addProperties({ lang });
   }
 };
+
+
+const titlePage = {
+  type: htmlButtonResponse,
+  stimulus: () => `
+    <h1>${i18n[lang].titlePageTitle}</h1>
+    <p>${i18n[lang].titlePageWelcome}</p>
+    <h3>${i18n[lang].titlePageTasksHeading}</h3>
+    <ul>
+      ${i18n[lang].titlePageTasksList.map(item => `<li>${item}</li>`).join('')}
+    </ul>
+    <h3>${i18n[lang].titlePageDurationHeading}</h3>
+    <p>${i18n[lang].titlePageDuration}</p>
+    <h3>${i18n[lang].titlePageDeviceHeading}</h3>
+    <p>${i18n[lang].titlePageDevice}</p>
+    <h3>${i18n[lang].titlePageAnonymityHeading}</h3>
+    <p>${i18n[lang].titlePageAnonymity}</p>
+    <h3>${i18n[lang].titlePageRightsHeading}</h3>
+    <p>${i18n[lang].titlePageRights}</p>
+    <p>${i18n[lang].titlePageContact}</p>
+  `,
+  choices: () => [ i18n[lang].agree ],
+  button_html: (choice) => `<button class="jspsych-btn">${choice}</button>`,
+  data: { trial_type: 'title', consent: 'I agree to participate' }
+};
+
+
 
 const welcome = {
   type: htmlKeyboardResponse,
@@ -148,26 +383,126 @@ const introduction = {
   type: htmlButtonResponse,
   stimulus: () => i18n[lang].instructions,
   choices: [ i18n[lang].continue ],
-  button_html: '<button class="jspsych-btn">%choice%</button>',
-  data: { trial_type: 'instructions' }
+  data: { trial_type: 'instructions' },
+  choices: "ALL_KEYS"
 };
 
 
-const demographics = {
+// ─── 1) Gender screen ─────────────────────────
+const genderForm = {
   type: surveyHtmlForm,
-  data: { task: 'demographics' },      // ← added
-  preamble: `<h3>Enter your info:</h3>`,
-  html: `
-    <p>Gender: <select name="gender" required>
-      <option value="" disabled selected>Select…</option>
-      <option value="female">Female</option>
-      <option value="male">Male</option>
-      <option value="other">Other</option>
-    </select></p>
-    <p>Age: <input name="age" type="number" min="18" max="99" required></p>
-    <p>Hobbies: <input name="hobbies" type="text" placeholder="e.g. reading" required></p>
-  `
+  data: { task: 'demographics-gender' },
+  preamble: () => `<h3>${i18n[lang].genderPrompt}</h3>`,
+ // same here – return your html dynamically
+  html: () => `
+  <div>      
+  <label>
+          <input type="radio" name="gender" value="female" required>
+          ${i18n[lang].female}
+        </label><br>
+        <label>
+          <input type="radio" name="gender" value="male">
+          ${i18n[lang].male}
+        </label><br>
+        <label>
+          <input type="radio" name="gender" value="other">
+          ${i18n[lang].other}
+        </label>
+  </div>
+  `,
+  button_label: () => i18n[lang].continue
 };
+
+// ─── 2) Age screen ────────────────────────────
+const ageForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-age' },
+  preamble: () =>  `<h3>${i18n[lang].agePrompt}</h3>`,
+  html: () => `
+    <p><input name="age" type="number" min="18" max="99" required></p>
+  `,
+  button_label: () => i18n[lang].continue
+};
+
+// ─── 3) Hobbies screen ────────────────────────
+const hobbiesForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-hobbies' },
+  preamble: () => `<h3>${i18n[lang].hobbiesPrompt}</h3>`,
+  html: () => `
+    <p>
+      <label><input type="checkbox" name="hobbies" value="Reading"> Reading</label><br>
+      <label><input type="checkbox" name="hobbies" value="Sports"> Sports</label><br>
+      <label><input type="checkbox" name="hobbies" value="Music"> Music</label><br>
+      <label><input type="checkbox" name="hobbies" value="Travel"> Travel</label><br>
+      <label><input id="hobby-other-cb" type="checkbox" name="hobbies" value="Other"> Other</label>
+      <input id="hobby-other-txt" name="hobbiesOther"
+             type="text"
+             placeholder="${i18n[lang].hobbiesOtherPlaceholder}"
+             style="display:none; margin-left:1em; width:80%;">
+    </p>
+    <script>
+      (function(){
+        const boxes = document.querySelectorAll('input[type="checkbox"][name="hobbies"]');
+        const otherCb = document.getElementById('hobby-other-cb');
+        const otherTxt = document.getElementById('hobby-other-txt');
+        boxes.forEach(cb=>{
+          cb.addEventListener('change', ()=>{
+            const checked = Array.from(boxes).filter(x=>x.checked);
+            // enforce max 3
+            if (checked.length > 3) cb.checked = false;
+            // disable extras
+            boxes.forEach(x=>{
+              x.disabled = !x.checked && checked.length >= 3;
+            });
+            // show/hide the Other‐text
+            otherTxt.style.display = otherCb.checked ? 'inline-block' : 'none';
+            if (!otherCb.checked) otherTxt.value = '';
+          });
+        });
+      })();
+    </script>
+  `,
+  button_label: () => i18n[lang].continue
+};
+
+const computerTimeForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-computerTime' },
+  preamble: () => `<h3>${i18n[lang].computerTimePrompt}</h3>`,
+  html: () => `
+    <p>
+      <label>
+        <select name="computerTime" required>
+          <option value="" disabled selected>Select…</option>
+          ${i18n[lang].computerTimeOptions
+            .map(opt => `<option value="${opt}">${opt}</option>`)
+            .join('')}
+        </select>
+      </label>
+    </p>
+  `,
+  button_label: () => i18n[lang].continue
+};
+
+const residenceForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-residence' },
+  preamble: () => `<h3>${i18n[lang].residencePrompt}</h3>`,
+  html: () => `
+    <p>
+      <label>
+        <select name="residence" required>
+          <option value="" disabled selected>Select…</option>
+          <option value="city">${i18n[lang].residenceCity}</option>
+          <option value="outside">${i18n[lang].residenceOutside}</option>
+        </select>
+      </label>
+    </p>
+  `,
+  button_label: () => i18n[lang].continue
+};
+
 
 // ──────────────────────────────────────────────
 // 1) Your unchanged intro & countdown
@@ -203,7 +538,7 @@ const fixationCheck = {
 const tooSoon = {
   type: htmlKeyboardResponse,
   stimulus: `
-    <p>Too soon! Please wait for the green “X” before responding.</p>
+    <p>Too soon! Please wait for the “X” before responding.</p>
     <p>Press any key to retry this reaction.</p>`,
   choices: 'ALL_KEYS'
 };
@@ -213,7 +548,7 @@ const tooSoon = {
 // ──────────────────────────────────────────────
 const reactionTrial = {
   type: htmlKeyboardResponse,
-  stimulus: '<div style="font-size:48px; color:green;">X</div>',
+  stimulus: '<div style="font-size:48px; color:black;">X</div>',
   choices: 'ALL_KEYS',      // accept any key
   response_ends_trial: true,
   data: { task: 'reaction' }
@@ -284,9 +619,9 @@ const reactionBlock = {
 const showBaseline = {
     type: htmlKeyboardResponse,
     stimulus: () => {
-      console.log('⚙️ All trials so far:', jsPsych.data.get().values());
-      console.log('⚙️ reactionTrials:', jsPsych.data.get().filter({task:'reaction'}).values());
-      console.log('⚙️ searchingg:', jsPsych.data.get().filter({ task: 'search' }).values());
+      //console.log('⚙️ All trials so far:', jsPsych.data.get().values());
+      //console.log('⚙️ reactionTrials:', jsPsych.data.get().filter({task:'reaction'}).values());
+      //console.log('⚙️ searchingg:', jsPsych.data.get().filter({ task: 'search' }).values());
       const recs = jsPsych.data.get().filter({task:'reaction'}).values();
       const rts  = recs.map(r => r.rt);
       const avg  = rts.length ? (rts.reduce((a,b)=>a+b)/rts.length).toFixed(2) : 'N/A';
@@ -410,8 +745,8 @@ const searchConditions = [
 ];
 
 // add the “I can't find T” label
-i18n.en.noT = "No T";
-i18n.lv.noT = "Es nevaru atrast T";
+i18n.en.noT = "Can't find T";
+i18n.lv.noT = "Nevar atrast T";
 
 // ──────────────────────────────────────────────
 // 2) Palette for impossible (64 unique hues)
@@ -452,7 +787,12 @@ function makeSearchBlock(cond) {
   const size      = 8;
   const total     = size * size;    // 64
   const noTIndex  = total;          // sentinel for “I can’t find T”
-  const targetIdx = Math.floor(Math.random() * total);
+  const absentProb  = 0.2;             // 20% of trials have no T
+  const targetPresent = Math.random() > absentProb;
+    // if present, pick a random cell; if absent, null
+    const targetIdx   = targetPresent
+    ? Math.floor(Math.random() * total)
+    : null;
 
   // (Optional) unique‐hue logic for “impossible” trials
   let cellColors = null;
@@ -463,7 +803,7 @@ function makeSearchBlock(cond) {
 
   // 1) Build the 64 grid‐cell HTML strings
   const gridChoices = Array.from({ length: total }, (_, i) => {
-    const isT    = (i === targetIdx);
+    const isT    = targetPresent && i === targetIdx;
     const symbol = isT ? 'T' : 'L';
     const rot    = isT ? 0 : pick([0, 90, 180, 270]);
     const col    = cond.label === 'impossible'
@@ -499,7 +839,8 @@ function makeSearchBlock(cond) {
         task:         'search',
         difficulty:   cond.label,
         set_size:     size,
-        target_index: targetIdx
+        target_present: targetPresent,
+        target_index:   targetIdx
       },
       on_start: trial => {
         // record start time for both grid clicks & No-T
@@ -524,7 +865,7 @@ function makeSearchBlock(cond) {
               clicked_index:  null,
               clicked_row:    null,
               clicked_col:    null,
-              correct:        false
+              correct:        !trial.data.target_present
             });
           };
         }, 0);
@@ -532,15 +873,24 @@ function makeSearchBlock(cond) {
       on_finish: data => {
         // if they clicked a grid cell (response < 64)
         if (data.response < total) {
+
+          const clicked = data.response;
+
           data.noT_selected   = false;
-          data.response_label = `cell ${data.response}`;
-          data.target_row     = Math.floor(targetIdx / size);
-          data.target_col     = targetIdx % size;
-          data.clicked_index  = data.response;
-          data.clicked_row    = Math.floor(data.response / size);
-          data.clicked_col    = data.response % size;
+          data.response_label = `cell ${clicked}`;
+          data.target_row      = targetPresent
+                                ? Math.floor(targetIdx / size)
+                                : null;
+          data.target_col      = targetPresent
+                                ? targetIdx % size
+                                : null;
+          data.clicked_index  = clicked;
+          data.clicked_row    = Math.floor(clicked / size);
+          data.clicked_col    = clicked % size;
           // plugin recorded data.rt automatically
-          data.correct        = (data.response === targetIdx);
+          data.correct         = (
+            targetPresent && clicked === targetIdx
+          );
         }
         // else: No-T case was fully handled in finishTrial above
       }
@@ -604,6 +954,67 @@ const showSearchSummary = {
 const goodbye    = { type: htmlButtonResponse, stimulus:`<h3>${i18n[lang].thanks}</h3>`, choices:['Exit'] };
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
+// ─── Feedback form ────────────────────────────────────
+const feedbackForm = {
+  type: surveyHtmlForm,
+  data: { task: 'feedback' },
+  preamble: () => `<h3>${i18n[lang].feedbackTitle}</h3>`,
+  html: () => `
+    <!-- 1) Difficulty rating -->
+    <p>
+      <label>${i18n[lang].feedbackDifficultyLabel}
+        <select name="difficulty" required>
+          <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+    </p>
+
+    <!-- 2.1) Easiest color combination -->
+    <p>
+      <label>${i18n[lang].feedbackEasiestLabel}
+        <select name="colorEasiest" required>
+          <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
+          <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
+          <option value="redBlack">${i18n[lang].colorOptRedBlack}</option>
+          <option value="blueRedBlack">${i18n[lang].colorOptBlueRedBlack}</option>
+          <option value="impossible">${i18n[lang].colorOptImpossible}</option>
+          <option value="noT">${i18n[lang].noT}</option>
+        </select>
+      </label>
+    </p>
+
+    <!-- 2.2) Hardest color combination -->
+    <p>
+      <label>${i18n[lang].feedbackHardestLabel}
+        <select name="colorHardest" required>
+          <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
+          <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
+          <option value="redBlack">${i18n[lang].colorOptRedBlack}</option>
+          <option value="blueRedBlack">${i18n[lang].colorOptBlueRedBlack}</option>
+          <option value="impossible">${i18n[lang].colorOptImpossible}</option>
+          <option value="noT">${i18n[lang].noT}</option>
+        </select>
+      </label>
+    </p>
+
+    <!-- 3) Free-text comments -->
+    <p>
+      <label>${i18n[lang].feedbackCommentsLabel}<br/>
+        <textarea name="comments" rows="4" style="width:100%;"></textarea>
+      </label>
+    </p>
+  `,
+  button_label: () => i18n[lang].submitFeedback
+};
+
+
+
+
 // ─── Step 2: Build payload inside saveData ─────
 const saveData = {
   type: callFunction,
@@ -613,11 +1024,19 @@ const saveData = {
     const searchTrials   = jsPsych.data.get().filter({ task:'search' }).values();
     // aggregate
     const agg = {};
+
     searchTrials.forEach(tr => {
         const key = `${tr.difficulty}|${tr.set_size}`;
         agg[key] = agg[key] || { difficulty: tr.difficulty, set_size: tr.set_size, rts: [], corrects: [] };
         agg[key].rts.push(tr.rt);
-        agg[key].corrects.push(tr.correct ? 1 : 0);
+        //agg[key].corrects.push(tr.correct ? 1 : 0);
+          // new: count as correct if either
+          //   a) target was present and user clicked it, OR
+          //   b) target was absent and user clicked “No T”
+        const wasCorrect = tr.target_present
+          ? tr.correct
+          : tr.noT_selected;
+        agg[key].corrects.push(wasCorrect ? 1 : 0);
       });
       const summaries = Object.values(agg).map(g => ({
         difficulty: g.difficulty,
@@ -626,12 +1045,64 @@ const saveData = {
         accuracy:   +((g.corrects.reduce((a,b)=>a+b,0)/g.corrects.length)*100).toFixed(1)
       }));;
 
-      const demoRec = jsPsych.data
+
+      // ─── Gather demographics from each mini‐form ────────────────────────────
+      // 1) Gender
+      const genderRec = jsPsych.data
       .get()
-      .filter({ task: 'demographics' })
-      .values()[0] || {};
-      
-      const demographics = demoRec.response || {}
+      .filter({ task: 'demographics-gender' })
+      .values()[0] || { response: {} };
+
+      // 2) Age
+      const ageRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-age' })
+      .values()[0] || { response: {} };
+
+      // 3) Hobbies (checkboxes + optional Other text)
+      const hobbyRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-hobbies' })
+      .values()[0] || { response: {} };
+
+      // 4) Daily computer time
+      const compRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-computerTime' })
+      .values()[0] || { response: {} };
+
+      // 5) Residence
+      const resRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-residence' })
+      .values()[0] || { response: {} };
+
+      // ─── Compose single demographics object ────────────────────────────────
+      const demographics = {
+      gender:            genderRec.response.gender || null,
+      age:               parseInt(ageRec.response.age, 10) || null,
+      hobbies:           Array.isArray(hobbyRec.response.hobbies)
+                          ? hobbyRec.response.hobbies
+                          : [hobbyRec.response.hobbies].filter(Boolean),
+      hobbiesOther:      hobbyRec.response.hobbiesOther || "",
+      dailyComputerTime: compRec.response.computerTime || null,
+      residence:         resRec.response.residence || null
+      };
+
+
+      // 4) feedback
+      // 4) grab the feedback response
+      const fbRec = jsPsych.data.get()
+        .filter({ task: 'feedback' })
+        .values()[0] || { response: {} };
+
+        const feedback = {
+          difficulty_rating: parseInt(fbRec.response.difficulty, 10),  // 1–5 numeric
+          easiest_combo: fbRec.response.colorEasiest,
+          hardest_combo: fbRec.response.colorHardest,
+          comments:      fbRec.response.comments || ""
+        };
+
 
       const payload = {
         sessionID,
@@ -639,11 +1110,12 @@ const saveData = {
         demographics,
         reaction_trials: reactionTrials,
         search_trials:   searchTrials,
-        summaries
+        summaries,
+        feedback
       };
     // full payload
     // POST to backend
-    console.log('📤 Posting payload:', payload);
+    //console.log('📤 Posting payload:', payload);
     postData(API, payload);
   }
 };
@@ -651,13 +1123,19 @@ const saveData = {
 // ─── Run the timeline ───────────────────────────
 jsPsych.run([
   languageScreen,
-  welcome,
-  demographics,
+  //welcome,
+  titlePage,
+  genderForm,
+  ageForm,
+  hobbiesForm,
+  computerTimeForm,   // ← new
+  residenceForm,      // ← new
   reactionBlock,
   showBaseline,
   ...practiceTimeline,
   ...searchSegments,
   showSearchSummary,
+  feedbackForm,
   saveData,    // ← data‐posting here
   goodbye,
   finalThanks
