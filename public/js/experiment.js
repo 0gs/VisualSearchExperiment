@@ -87,7 +87,7 @@ const i18n = {
     correct: "✅ Correct!",
     incorrect: "❌ Incorrect",
     thanks: "Thank you! Press Exit to finish.",
-    endMessage: "Thank you for completing the experiment. You may now close this page.",
+    endMessage: "Thank you very much for taking part! You can now close this page.",
     noT: "I can't find T",
     mobileTitle: "Please switch to a desktop or laptop",
     mobileDesc: "This experiment works best on a computer with a keyboard.",
@@ -126,9 +126,13 @@ const i18n = {
     tooSoonBody: "Please wait for the green “X” before responding.",
     reactionProgress: "Reaction time test {done} / 5 completed.",
     reactionReady: "Press any key when you’re ready for the next one.",
-    practiceTitle: "Practice Trials (3)",
-    practiceDesc: "These won’t be recorded.",
-    practiceDone: "Practice complete! The real test will start now.",
+    practiceTitle: "Practice Exercises (5)",
+    practiceInfo:            "No data will be saved for these exercises.",
+    practiceBeginPrompt:     "Press any key to start.",
+    practiceCompleteMessage: "Practice complete! The real visual search test will start now.",
+    practiceContinuePrompt:  "Press any key to continue.",
+    practiceDesc: "No data will be saved for these exercises.",
+    practiceDone: "Practice complete! The real visual search test will start now.",
     practiceContinue: "Press any key to continue.",
     exit: "Exit",
     titlePageTitle: "Experimental testing of a visual search digital environment",
@@ -158,27 +162,29 @@ const i18n = {
     feedbackRating5:       "5 – Very easy",
     feedbackCommentsLabel: "Any comments or suggestions?",
     submitFeedback:        "Submit Feedback",
-    feedbackTitle:             "Quick feedback",
-    feedbackDifficultyLabel:   "Rate task difficulty (1 = very easy, 5 = very hard)",
-    feedbackColorLabel:        "Which color combination was easiest for you?",
-    colorOptBlack:             "Black only",
-    colorOptRedBlack:          "Red Target – Black L’s",
-    colorOptBlueRedBlack:      "Blue Target – Red/Green L’s",
-    colorOptImpossible:        "Each symbol a different color",
-    feedbackCommentsLabel:     "Any comments or difficulties?",
-    submitFeedback:            "Submit Feedback",
+    feedbackTitle:             "Your feedback",
+    feedbackDifficultyLabel: "Rate the difficulty of the visual search tasks (1 = very easy, 5 = very difficult)",
+    feedbackColorLabel: "Which colour combination did you find the easiest?",
+    feedbackColorLabel2: "Which colour combination did you find the most difficult?",
+    colourOptBlack: "All symbols in black",
+    colourOptRedBlack: "Red target object T - between the other symbols in black",
+    colourOptBlueRedBlack: "Blue target object T - between the other symbols in red and green",
+    colourOptImpossible: "Each symbol in a different colour",
+    feedbackCommentsLabel: "Additional comments:",
+    submitFeedback: 'Submit feedback',
     agree:                     "I agree",
     computerTimePrompt: "How much time do you spend at a computer/laptop daily?",
     computerTimeOptions: [
-      "< 1 hour",
-      "1–2 hours",
-      "2–4 hours",
+      "Less than 1 hour",
+      "1–3 hours",
       "4–6 hours",
-      "> 6 hours"
+      "7–9 hours",
+      "10 or more hours"
     ],
-    residencePrompt: "Do you live in a city or outside?",
-    residenceCity: "City",
-    residenceOutside: "Outside city",
+    residencePrompt: "Which of the following best describes where you live?",
+    residenceCity: "Large city (over 100 000 inhabitants)",
+    residenceCity2: "Small city (under 100 000 inhabitants)",
+    residenceOutside: "Rural / countryside",
         // Demographics prompts
         genderPrompt:            "Please select your gender:",
         female:                  "Female",
@@ -187,17 +193,35 @@ const i18n = {
     
         agePrompt:               "Please enter your age:",
     
-        hobbiesPrompt:           "Select up to three hobbies:",
+        hobbiesPrompt:           "Which of the following activities do you regularly engage in?",
+        hobbiesPrompt2:           "Select 3 activities...",
         hobbiesOtherPlaceholder: "If Other, please specify…",
     
         // Generic
-        continue:                "Continue"
+        continue:                "Continue",
+        hobbyVideoGaming:        "Video gaming",
+        hobbyProgramming:        "Programming / coding",
+        hobbyReading:            "Reading (books, e-books)",
+        hobbyPuzzles:            "Board games / puzzles",
+        hobbyOutdoor:            "Outdoor sports (running, cycling)",
+        hobbyIndoor:             "Indoor exercise (yoga, gym workouts)",
+        hobbyCreative:           "Creative arts (drawing, music, photography)",
+        hobbyWatching:           "Watching movies",
+        hobbyOther:              "Other",
+        hobbiesOtherPlaceholder: "Please specify…",
+        practiceFeedbackCorrectTitle:    "✅ Correct!",
+        practiceFeedbackIncorrectTitle:  "❌ Incorrect, please click the letter T.",
+        practiceFeedbackContinue:        "Press any key to continue.",
+        practiceFeedbackRetry:           "Press any key to retry.",
+        reactionProgressText1: `Reaction test`,
+reactionProgressText2: ` / 5 completed.`,
+  reactionProgressPrompt: "Press any key when you are ready."
   },
   lv: {
     languagePrompt: "Izvēlieties valodu:",
     welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
     begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
-    reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet ATSTARPI, kad redzat 'X'.",
+    reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru klavietūras taustiņu, kad redzat 'X'.",
     findT: "Atrodiet burtu <strong>T</strong>",
     ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
     avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
@@ -211,8 +235,8 @@ const i18n = {
     break: "Īsa pauze! Nospiediet jebkuru taustiņu.",
     correct: "✅ Pareizi!",
     incorrect: "❌ Nepareizi",
-    thanks: "Paldies! Nospiediet Exit, lai pabeigtu eksperimentu.",
-    endMessage: "Paldies, ka piedalījāties! Jūs varat aizvērt šo lapu.",
+    thanks: "Paldies! Nospiediet 'Beigt', lai pabeigtu eksperimentu.",
+    endMessage: "Liels paldies, ka piedalījāties! Jūs tagad varat aizvērt šo lapu.",
     noT: "Es nevaru atrast T",
     mobileTitle: "Lūdzu pārejiet uz datoru vai portatīvo datoru",
     mobileDesc: "Šis eksperiments vislabāk darbojas datorā ar tastatūru.",
@@ -255,9 +279,9 @@ const i18n = {
     practiceDesc: "Šie netiks ierakstīti.",
     practiceDone: "Prakse pabeigta! Tagad sāksies īstais tests.",
     practiceContinue: "Nospiediet jebkuru taustiņu, lai turpinātu.",
-    exit: "Aizvērt",
+    exit: "Beigt",
     titlePageTitle: "Vizuālās meklēšanas digitālas vides eksperimentāla testēšana",
-    titlePageWelcome: "Laipni lūdzam! Jūs esat aicināts piedalīties Latvijas Universitātes 'Datorzinātnes' 4. studiju kursa studenta bakalaura darba pētījumā .",
+    titlePageWelcome: "Laipni lūdzam! Jūs esat aicināts piedalīties Latvijas Universitātes Datorzinātnes studiju programmas 4. kursa studenta bakalaura darba pētījumā.",
     titlePageTasksHeading: "Kādi uzdevumi ir paredzēti?",
     titlePageTasksList: [
       "Reakcijas laika tests (nospiediet jebkuru klavietūras taustiņu, kad redzat simbolu “X”).",
@@ -268,53 +292,75 @@ const i18n = {
     titlePageDeviceHeading: "Kādām ierīcēm ir paredzēti šie uzdevumi?",
     titlePageDevice: "Lūdzu, izmantojiet stacionāro datoru vai klēpjdatoru. Mobilās ierīces nav atbalstītas.",
     titlePageAnonymityHeading: "Vai iegūtie dati ir anonīmi?",
-    titlePageAnonymity: "Jā. Eksperimenta laikā netiek saglabāti personas dati. Tiek anonīmi saglabātas tikai Jūst atbildes uz aptaujas jautājumiem un izpildīto uzdevumu pārskats.",
+    titlePageAnonymity: "Jā. Eksperimenta laikā netiek saglabāti personas dati. Tiek anonīmi saglabātas tikai Jūsu atbildes uz aptaujas jautājumiem un izpildīto uzdevumu pārskats.",
     titlePageIPHeading: "IP adreses politika:",
     titlePageIPDesc: "(Nav obligāti – iekļaujiet tikai, ja saglabājat IP adreses) Lai nodrošinātu, ka dalībnieki izpilda eksperimentu tikai vienu reizi, jūsu IP adrese var tikt īslaicīgi saglabāta pēc datu vākšanas un izdzēsta. Tā netiks sasaistīta ar jūsu reakcijas laika vai precizitātes datiem.",
     titlePageRightsHeading: "Dalība ir brīvprātīga!",
     titlePageRights: "Jūs varat pārtraukt eksperimentu jebkurā laikā, aizverot logu.",
     titlePageContact: "Jautājumu gadījumā sazinieties: georgssprucs@gmail.com",
     feedbackPrompt:        "Lūdzu, pastāstiet, kā jums patika eksperimenta norise:",
-    feedbackRatingLabel:   "Kopumā, cik viegls/grūts tas bija?",
     feedbackRating1:       "1 – Ļoti grūti",
     feedbackRating2:       "2 – Grūti",
     feedbackRating3:       "3 – Vidēji",
     feedbackRating4:       "4 – Viegli",
     feedbackRating5:       "5 – Ļoti viegli",
-    feedbackCommentsLabel: "Komentāri vai ieteikumi?",
-    submitFeedback:        "Iesniegt atsauksmes",
-    feedbackTitle:             "Ātrās atsauksmes",
-    feedbackDifficultyLabel:   "Novērtējiet uzdevuma grūtību (1 = ļoti viegli, 5 = ļoti grūti)",
+    feedbackTitle:             "Jūsu atsauksmes",
+    feedbackDifficultyLabel:   "Novērtējiet vizuālās meklēšanas uzdevumu sarežģītību (1 = ļoti viegli, 5 = ļoti grūti)",
     feedbackColorLabel:        "Kura krāsu kombinācija jums šķita vieglākā?",
-    colorOptBlack:             "Tikai melna",
-    colorOptRedBlack:          "Sarkans mērķis – melni L",
-    colorOptBlueRedBlack:      "Zils mērķis – sarkani/zaļi L",
+    feedbackColorLabel2:        "Kura krāsu kombinācija jums šķita sarežģītākā?",
+    colorOptBlack:             "Visi simboli melnā krāsā",
+    colorOptRedBlack:          "Sarkans mērķa objekts T – starp pārājiem simboliem melnā krāsā",
+    colorOptBlueRedBlack:      "Zils mērķis objekts T – starp pārājiem simboliem sarkanā un zaļā krāsā",
     colorOptImpossible:        "Katrs simbols citā krāsā",
-    feedbackCommentsLabel:     "Jebkādi komentāri vai grūtības?",
-    submitFeedback:            "Iesniegt atsauksmes",
+    feedbackCommentsLabel:     "Vieta papildus komentāriem:",
+    submitFeedback:            "Iesniegt",
     agree:                     "Es piekrītu",
     computerTimePrompt: "Cik laika dienā jūs pavadāt pie datora/portatīvā datora?",
     computerTimeOptions: [
-      "< 1 stunda",
-      "1–2 stundas",
-      "2–4 stundas",
+      "Mazāk par 1 stundu",
+      "1–3 stundas",
       "4–6 stundas",
-      "> 6 stundas"
+      "7–9 stundas",
+      "Vairāk nekā 10 stundas"
     ],
-    residencePrompt: "Vai jūs dzīvojat pilsētā vai ārpus tās?",
-    residenceCity: "Pilsētā",
-    residenceOutside: "Ārpus pilsētas",
-    genderPrompt:            "Lūdzu norādiet savu dzimumu:",
+    residencePrompt: "Kurš no šiem aprakstiem vislabāk raksturo jūsu dzīvesvietu?",
+    residenceCity: "Liela pilsēta (vairāk nekā 100 000 iedzīvotāju)",
+    residenceCity2: "Maza pilsēta (zem 100 000 iedzīvotāju)",
+    residenceOutside: "Lauki / ārpus pilsētas",
+    genderPrompt:            "Lūdzu, norādiet savu dzimumu:",
     female:                  "Sieviete",
     male:                    "Vīrietis",
     other:                   "Cits",
 
-    agePrompt:               "Lūdzu ievadiet savu vecumu:",
+    agePrompt:               "Lūdzu, ievadiet savu vecumu:",
 
-    hobbiesPrompt:           "Izvēlieties līdz trim hobijiem:",
+    hobbiesPrompt:           "Kuras no šīm aktivitātēm Jūs veicat regulāri?",
+    hobbiesPrompt2:           "Izvēlieties 3 aktivitātes...",
     hobbiesOtherPlaceholder: "Ja “Cits”, lūdzu ievadiet…",
 
+    hobbyVideoGaming:        "Videospēles",
+    hobbyProgramming:        "Programmēšana",
+    hobbyReading:            "Lasīšana (grāmatas, e-grāmatas)",
+    hobbyPuzzles:            "Galda spēles / puzles",
+    hobbyOutdoor:            "Āra sporta veidi (skriešana, riteņbraukšana)",
+    hobbyIndoor:             "Iekštelpu nodarbības (joga, treniņš zālē)",
+    hobbyCreative:           "Radošās mākslas (zīmēšana, mūzika, fotogrāfija)",
+    hobbyWatching:           "Filmu skatīšanās",
+    hobbyOther:              "Cits",
+    hobbiesOtherPlaceholder: "Lūdzu norādiet…",
     continue:                "Turpināt",
+    practiceTitle:           "Iesildīšanās mēģinājumi (5)",
+    practiceInfo:            "Dati par šiem uzdevumiem netiks saglabāti.",
+    practiceBeginPrompt:     "Nospiediet jebkuru taustiņu, lai sāktu.",
+    practiceCompleteMessage: "Iesildīšanās pabeigta! Tagad sākas īstais vizuālās meklēšanas tests.",
+    practiceContinuePrompt:  "Nospiediet jebkuru taustiņu, lai turpinātu.",
+    practiceFeedbackCorrectTitle:    "✅ Pareizi!",
+    practiceFeedbackIncorrectTitle:  "❌ Nepareizi, lūdzu noklikšķiniet uz simbola T.",
+    practiceFeedbackContinue:        "Nospiediet jebkuru taustiņu, lai turpinātu.",
+    practiceFeedbackRetry:           "Nospiediet jebkuru taustiņu, lai mēģinātu vēlreiz.",
+    reactionProgressText1: `Reakcijas tests`,
+reactionProgressText2: ` / 5 pabeigts.`,
+  reactionProgressPrompt: "Nospiediet jebkuru taustiņu, kad esat gatavs."
   }
 };
 
@@ -353,9 +399,9 @@ const titlePage = {
     <h1>${i18n[lang].titlePageTitle}</h1>
     <p>${i18n[lang].titlePageWelcome}</p>
     <h3>${i18n[lang].titlePageTasksHeading}</h3>
-    <ul>
-      ${i18n[lang].titlePageTasksList.map(item => `<li>${item}</li>`).join('')}
-    </ul>
+    <p>
+      ${i18n[lang].titlePageTasksList.map(item => `<p>${item}</p>`).join('')}
+    </p>
     <h3>${i18n[lang].titlePageDurationHeading}</h3>
     <p>${i18n[lang].titlePageDuration}</p>
     <h3>${i18n[lang].titlePageDeviceHeading}</h3>
@@ -428,43 +474,43 @@ const ageForm = {
 const hobbiesForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-hobbies' },
-  preamble: () => `<h3>${i18n[lang].hobbiesPrompt}</h3>`,
+  preamble: () => `<h3>${i18n[lang].hobbiesPrompt}</h3> <p>${i18n[lang].hobbiesPrompt2}</p>`,
   html: () => `
     <p>
-      <label><input type="checkbox" name="hobbies" value="Reading"> Reading</label><br>
-      <label><input type="checkbox" name="hobbies" value="Sports"> Sports</label><br>
-      <label><input type="checkbox" name="hobbies" value="Music"> Music</label><br>
-      <label><input type="checkbox" name="hobbies" value="Travel"> Travel</label><br>
-      <label><input id="hobby-other-cb" type="checkbox" name="hobbies" value="Other"> Other</label>
+      <label><input type="checkbox" name="hobbies" value="videoGaming"> ${i18n[lang].hobbyVideoGaming}</label><br>
+      <label><input type="checkbox" name="hobbies" value="programming"> ${i18n[lang].hobbyProgramming}</label><br>
+      <label><input type="checkbox" name="hobbies" value="reading"> ${i18n[lang].hobbyReading}</label><br>
+      <label><input type="checkbox" name="hobbies" value="puzzles"> ${i18n[lang].hobbyPuzzles}</label><br>
+      <label><input type="checkbox" name="hobbies" value="outdoorSports"> ${i18n[lang].hobbyOutdoor}</label><br>
+      <label><input type="checkbox" name="hobbies" value="indoorExercise"> ${i18n[lang].hobbyIndoor}</label><br>
+      <label><input type="checkbox" name="hobbies" value="creativeArts"> ${i18n[lang].hobbyCreative}</label><br>
+      <label><input type="checkbox" name="hobbies" value="watching"> ${i18n[lang].hobbyWatching}</label><br>
+      <label><input id="hobby-other-cb" type="checkbox" name="hobbies" value="other" maxlength="50"> ${i18n[lang].hobbyOther}</label>
       <input id="hobby-other-txt" name="hobbiesOther"
              type="text"
              placeholder="${i18n[lang].hobbiesOtherPlaceholder}"
              style="display:none; margin-left:1em; width:80%;">
     </p>
-    <script>
-      (function(){
-        const boxes = document.querySelectorAll('input[type="checkbox"][name="hobbies"]');
-        const otherCb = document.getElementById('hobby-other-cb');
-        const otherTxt = document.getElementById('hobby-other-txt');
-        boxes.forEach(cb=>{
-          cb.addEventListener('change', ()=>{
-            const checked = Array.from(boxes).filter(x=>x.checked);
-            // enforce max 3
-            if (checked.length > 3) cb.checked = false;
-            // disable extras
-            boxes.forEach(x=>{
-              x.disabled = !x.checked && checked.length >= 3;
-            });
-            // show/hide the Other‐text
-            otherTxt.style.display = otherCb.checked ? 'inline-block' : 'none';
-            if (!otherCb.checked) otherTxt.value = '';
-          });
-        });
-      })();
-    </script>
   `,
+  on_load: () => {
+    const boxes   = document.querySelectorAll('input[type="checkbox"][name="hobbies"]');
+    const otherCb = document.getElementById('hobby-other-cb');
+    const otherTxt= document.getElementById('hobby-other-txt');
+    boxes.forEach(cb => {
+      cb.addEventListener('change', ()=>{
+        const checked = Array.from(boxes).filter(x=>x.checked);
+        if (checked.length>3) cb.checked = false;
+        boxes.forEach(x=>{
+          x.disabled = !x.checked && checked.length>=3;
+        });
+        otherTxt.style.display = otherCb.checked ? 'inline-block' : 'none';
+        if (!otherCb.checked) otherTxt.value = '';
+      });
+    });
+  },
   button_label: () => i18n[lang].continue
 };
+
 
 const computerTimeForm = {
   type: surveyHtmlForm,
@@ -495,6 +541,7 @@ const residenceForm = {
         <select name="residence" required>
           <option value="" disabled selected>Select…</option>
           <option value="city">${i18n[lang].residenceCity}</option>
+          <option value="city">${i18n[lang].residenceCity2}</option>
           <option value="outside">${i18n[lang].residenceOutside}</option>
         </select>
       </label>
@@ -516,7 +563,7 @@ const reactionCountdown = [3,2,1].map(n => ({
   type: htmlKeyboardResponse,
   stimulus: `<p>${n}</p>`,
   choices: [],            // no key accepted here
-  trial_duration: 1000
+  trial_duration: 1500
 }));
 
 // ──────────────────────────────────────────────
@@ -561,8 +608,8 @@ const reactionProgress = {
   type: htmlKeyboardResponse,
   stimulus: () => {
     const done = jsPsych.data.get().filter({ task:'reaction' }).count();
-    return `<p>Reaction test ${done} / 5 completed.</p>
-            <p>Press any key when you’re ready for the next one.</p>`;
+    return `<p>${i18n[lang].reactionProgressText1} ${done} ${i18n[lang].reactionProgressText2}</p>
+            <p>${i18n[lang].reactionProgressPrompt}</p>`;
   },
   choices: 'ALL_KEYS'
 };
@@ -611,7 +658,7 @@ const reactionBlock = {
     reactionIntro,
     ...reactionCountdown,
     // repeat oneReaction 5 times:
-    ...Array.from({length:0}, () => [ oneReaction ]).flat()
+    ...Array.from({length:5}, () => [ oneReaction ]).flat()
   ]
 };
 
@@ -638,13 +685,14 @@ const showBaseline = {
 const allSearchConds = [];
 [['black'], ['black','red'], ['red','blue','green']].forEach((colors, idx) => {
   const diff = ['easy','medium','hard'][idx];
-  [2,4,8].forEach(size => {
+  [8].forEach(size => {
     allSearchConds.push({ colors, size, diff });
   });
 });
 
 // 2) Sample 3 of them without replacement
-const practiceConds = jsPsych.randomization.sampleWithoutReplacement(allSearchConds, 0);
+// change amount of practice runs
+const practiceConds = jsPsych.randomization.sampleWithoutReplacement(allSearchConds, 5);
 
 // 3) A “practice” version of makeSearchSegment
 function makePracticeSegment(colors, size, difficultyLabel) {
@@ -675,11 +723,11 @@ function makePracticeSegment(colors, size, difficultyLabel) {
       choices: 'ALL_KEYS'
     },
     // countdown
-    ...[3,2,1,'Go!'].map(x => ({
+    ...[3,2,1].map(x => ({
       type: htmlKeyboardResponse,
       stimulus: `<p>${x}</p>`,
       choices: [],
-      trial_duration: 500
+      trial_duration: 1500
     })),
     // the grid button response
     {
@@ -699,9 +747,13 @@ function makePracticeSegment(colors, size, difficultyLabel) {
       stimulus: () => {
         const last = jsPsych.data.get().last(1).values()[0];
         if (last.correct) {
-          return `<p>✅ Correct!</p><p>Press any key to continue.</p>`;
+          return `
+            <p>${i18n[lang].practiceFeedbackCorrectTitle}</p>
+            <p>${i18n[lang].practiceFeedbackContinue}</p>`;
         } else {
-          return `<p>❌ Incorrect, please click the letter T.</p><p>Press any key to retry.</p>`;
+          return `
+            <p>${i18n[lang].practiceFeedbackIncorrectTitle}</p>
+            <p>${i18n[lang].practiceFeedbackRetry}</p>`;
         }
       },
       choices: 'ALL_KEYS'
@@ -713,9 +765,10 @@ function makePracticeSegment(colors, size, difficultyLabel) {
 const practiceTimeline = [];
 practiceTimeline.push({
   type: htmlKeyboardResponse,
-  stimulus: `<h3>Practice Trials (3)</h3>
-             <p>These won’t be recorded.</p>
-             <p>Press any key to begin.</p>`,
+  stimulus: () => `
+    <h3>${i18n[lang].practiceTitle}</h3>
+    <p>${i18n[lang].practiceInfo}</p>
+    <p>${i18n[lang].practiceBeginPrompt}</p>`,
   choices: 'ALL_KEYS'
 });
 
@@ -727,8 +780,9 @@ practiceConds.forEach(({colors, size, diff}, idx) => {
 
 practiceTimeline.push({
   type: htmlKeyboardResponse,
-  stimulus: `<p>Practice complete! The real test will start now.</p>
-             <p>Press any key to continue.</p>`,
+  stimulus: () => `
+    <p>${i18n[lang].practiceCompleteMessage}</p>
+    <p>${i18n[lang].practiceContinuePrompt}</p>`,
   choices: 'ALL_KEYS'
 });
 
@@ -764,12 +818,12 @@ const searchIntro = {
   choices: 'ALL_KEYS'
 };
 
-const searchCountdown = [3, 2, 1, 'Go!'].map(x => ({
+const searchCountdown = [3, 2, 1].map(x => ({
   type: htmlKeyboardResponse,
   stimulus: `<p>${x}</p>`,
   choices: 'NO_KEYS',
   response_ends_trial: false,
-  trial_duration: 1000
+  trial_duration: 1500
 }));
 
 const searchFixation = {
@@ -908,7 +962,7 @@ function makeSearchBlock(cond) {
 // ──────────────────────────────────────────────
 let blocks = [];
 searchConditions.forEach(cond => {
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 6; i++) {
     blocks.push(makeSearchBlock(cond));
   }
 });
@@ -951,7 +1005,7 @@ const showSearchSummary = {
   choices: 'ALL_KEYS'
 };
 
-const goodbye    = { type: htmlButtonResponse, stimulus:`<h3>${i18n[lang].thanks}</h3>`, choices:['Exit'] };
+const goodbye    = { type: htmlButtonResponse, stimulus: () =>`<h3>${i18n[lang].thanks}</h3>`, choices: () =>['${i18n[lang].exit}'] };
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
 // ─── Feedback form ────────────────────────────────────
@@ -976,7 +1030,7 @@ const feedbackForm = {
 
     <!-- 2.1) Easiest color combination -->
     <p>
-      <label>${i18n[lang].feedbackEasiestLabel}
+      <label>${i18n[lang].feedbackColorLabel}
         <select name="colorEasiest" required>
           <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
           <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
@@ -990,7 +1044,7 @@ const feedbackForm = {
 
     <!-- 2.2) Hardest color combination -->
     <p>
-      <label>${i18n[lang].feedbackHardestLabel}
+      <label>${i18n[lang].feedbackColorLabel2}
         <select name="colorHardest" required>
           <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
           <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
@@ -1005,7 +1059,7 @@ const feedbackForm = {
     <!-- 3) Free-text comments -->
     <p>
       <label>${i18n[lang].feedbackCommentsLabel}<br/>
-        <textarea name="comments" rows="4" style="width:100%;"></textarea>
+        <textarea name="comments" rows="4" style="width:100%;" maxlength="140"></textarea>
       </label>
     </p>
   `,
@@ -1131,10 +1185,10 @@ jsPsych.run([
   computerTimeForm,   // ← new
   residenceForm,      // ← new
   reactionBlock,
-  showBaseline,
+  //showBaseline,
   ...practiceTimeline,
   ...searchSegments,
-  showSearchSummary,
+  //showSearchSummary,
   feedbackForm,
   saveData,    // ← data‐posting here
   goodbye,
