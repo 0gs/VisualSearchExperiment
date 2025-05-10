@@ -21,7 +21,7 @@ export function escapeHtml(str) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      console.log('POST', endpoint, '→', await res.json());
+      //console.log('POST', endpoint, '→', await res.json());
     } catch (err) {
       console.error('Save error', err);
     }
