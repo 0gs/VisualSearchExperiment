@@ -126,7 +126,7 @@ const i18n = {
     tooSoonBody: "Please wait for the green “X” before responding.",
     reactionProgress: "Reaction time test {done} / 5 completed.",
     reactionReady: "Press any key when you’re ready for the next one.",
-    practiceTitle: "Practice Exercises (5)",
+    practiceTitle: "Practice Exercises (3)",
     practiceInfo:            "No data will be saved for these exercises.",
     practiceBeginPrompt:     "Press any key to start.",
     practiceCompleteMessage: "Practice complete! The real visual search test will start now.",
@@ -215,7 +215,23 @@ const i18n = {
         practiceFeedbackRetry:           "Press any key to retry.",
         reactionProgressText1: `Reaction test`,
 reactionProgressText2: ` / 5 completed.`,
-  reactionProgressPrompt: "Press any key when you are ready."
+  reactionProgressPrompt: "Press any key when you are ready.",
+  feedbackPrompt: "Please tell me how you liked the experiment:",
+feedbackRating1: "1 – Very difficult",
+feedbackRating2: "2 – Difficult",
+feedbackRating3: "3 – Average",
+feedbackRating4: "4 – Easy",
+feedbackRating5: "5 – Very easy",
+feedbackTitle: "Your feedback",
+feedbackDifficultyLabel: "Rate the difficulty of the visual search tasks (1 = very easy, 5 = very difficult)",
+feedbackColorLabel: "Which color combination did you find easiest?",
+feedbackColorLabel2: "Which color combination did you find most difficult?",
+colorOptBlack: "All symbols in black",
+colorOptRedBlack: "Red target object T – among other symbols in black",
+colorOptBlueRedBlack: "Blue target object T – among other symbols in red and green",
+colorOptImpossible: "Each symbol in a different color",
+feedbackCommentsLabel: "Space for additional comments:",
+submitFeedback: "Submit"
   },
   lv: {
     languagePrompt: "Izvēlieties valodu:",
@@ -470,46 +486,71 @@ const ageForm = {
   button_label: () => i18n[lang].continue
 };
 
-// ─── 3) Hobbies screen ────────────────────────
+// ─── 3) Hobbies screen (pick exactly one) ────────────────────────
 const hobbiesForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-hobbies' },
-  preamble: () => `<h3>${i18n[lang].hobbiesPrompt}</h3> <p>${i18n[lang].hobbiesPrompt2}</p>`,
+  preamble: () => `
+    <h3>${i18n[lang].hobbiesPrompt}</h3>
+    <p>${i18n[lang].hobbiesPrompt2}</p>
+  `,
   html: () => `
     <p>
-      <label><input type="checkbox" name="hobbies" value="videoGaming"> ${i18n[lang].hobbyVideoGaming}</label><br>
-      <label><input type="checkbox" name="hobbies" value="programming"> ${i18n[lang].hobbyProgramming}</label><br>
-      <label><input type="checkbox" name="hobbies" value="reading"> ${i18n[lang].hobbyReading}</label><br>
-      <label><input type="checkbox" name="hobbies" value="puzzles"> ${i18n[lang].hobbyPuzzles}</label><br>
-      <label><input type="checkbox" name="hobbies" value="outdoorSports"> ${i18n[lang].hobbyOutdoor}</label><br>
-      <label><input type="checkbox" name="hobbies" value="indoorExercise"> ${i18n[lang].hobbyIndoor}</label><br>
-      <label><input type="checkbox" name="hobbies" value="creativeArts"> ${i18n[lang].hobbyCreative}</label><br>
-      <label><input type="checkbox" name="hobbies" value="watching"> ${i18n[lang].hobbyWatching}</label><br>
-      <label><input id="hobby-other-cb" type="checkbox" name="hobbies" value="other" maxlength="50"> ${i18n[lang].hobbyOther}</label>
-      <input id="hobby-other-txt" name="hobbiesOther"
+      <label>
+        <input type="radio" name="hobbies" value="videoGaming" required>
+        ${i18n[lang].hobbyVideoGaming}
+      </label><br>
+      <label>
+        <input type="radio" name="hobbies" value="programming">
+        ${i18n[lang].hobbyProgramming}
+      </label><br>
+      <label>
+        <input type="radio" name="hobbies" value="reading">
+        ${i18n[lang].hobbyReading}
+      </label><br>
+      <label>
+        <input type="radio" name="hobbies" value="puzzles">
+        ${i18n[lang].hobbyPuzzles}
+      </label><br>
+      <label>
+        <input type="radio" name="hobbies" value="outdoorSports">
+        ${i18n[lang].hobbyOutdoor}
+      </label><br>
+      <label>
+        <input type="radio" name="hobbies" value="indoorExercise">
+        ${i18n[lang].hobbyIndoor}
+      </label><br>
+      <label>
+        <input type="radio" id="hobby-other-rb" name="hobbies" value="other">
+        ${i18n[lang].hobbyOther}
+      </label>
+      <input id="hobby-other-txt"
+             name="hobbiesOther"
              type="text"
+             maxlength="50"
              placeholder="${i18n[lang].hobbiesOtherPlaceholder}"
-             style="display:none; margin-left:1em; width:80%;">
+             style="display:none; margin-left:1em; width:70%;">
     </p>
   `,
   on_load: () => {
-    const boxes   = document.querySelectorAll('input[type="checkbox"][name="hobbies"]');
-    const otherCb = document.getElementById('hobby-other-cb');
-    const otherTxt= document.getElementById('hobby-other-txt');
-    boxes.forEach(cb => {
-      cb.addEventListener('change', ()=>{
-        const checked = Array.from(boxes).filter(x=>x.checked);
-        if (checked.length>3) cb.checked = false;
-        boxes.forEach(x=>{
-          x.disabled = !x.checked && checked.length>=3;
-        });
-        otherTxt.style.display = otherCb.checked ? 'inline-block' : 'none';
-        if (!otherCb.checked) otherTxt.value = '';
+    const otherRb  = document.getElementById('hobby-other-rb');
+    const otherTxt = document.getElementById('hobby-other-txt');
+    // show the text‐field only when “Other” is checked
+    document.querySelectorAll('input[name="hobbies"]').forEach(rb => {
+      rb.addEventListener('change', () => {
+        if (otherRb.checked) {
+          otherTxt.style.display = 'inline-block';
+          otherTxt.focus();
+        } else {
+          otherTxt.style.display = 'none';
+          otherTxt.value = '';
+        }
       });
     });
   },
   button_label: () => i18n[lang].continue
 };
+
 
 
 const computerTimeForm = {
@@ -579,16 +620,23 @@ const fixationCheck = {
   on_finish: d => { d.premature = d.response !== null; }
 };
 
+i18n.en.tooSoonTitle  = "Too soon! Please wait for the “X” before responding.";
+i18n.en.tooSoonPrompt = "Press any key to retry this reaction.";
+
+i18n.lv.tooSoonTitle  = "Pārāk agri! Lūdzu, gaidiet “X” pirms atbildes.";
+i18n.lv.tooSoonPrompt = "Nospiediet jebkuru taustiņu, lai mēģinātu vēlreiz.";
+
 // ──────────────────────────────────────────────
 // 3) Warning if they pressed too soon
 // ──────────────────────────────────────────────
 const tooSoon = {
   type: htmlKeyboardResponse,
-  stimulus: `
-    <p>Too soon! Please wait for the “X” before responding.</p>
-    <p>Press any key to retry this reaction.</p>`,
+  stimulus: () => `
+    <p>${i18n[lang].tooSoonTitle}</p>
+    <p>${i18n[lang].tooSoonPrompt}</p>`,
   choices: 'ALL_KEYS'
 };
+
 
 // ──────────────────────────────────────────────
 // 4) The actual reaction trial
@@ -692,7 +740,7 @@ const allSearchConds = [];
 
 // 2) Sample 3 of them without replacement
 // change amount of practice runs
-const practiceConds = jsPsych.randomization.sampleWithoutReplacement(allSearchConds, 5);
+const practiceConds = jsPsych.randomization.sampleWithoutReplacement(allSearchConds, 3);
 
 // 3) A “practice” version of makeSearchSegment
 function makePracticeSegment(colors, size, difficultyLabel) {
@@ -798,9 +846,7 @@ const searchConditions = [
   { label: 'impossible', targetColor: null,    distractorColors: null }
 ];
 
-// add the “I can't find T” label
-i18n.en.noT = "Can't find T";
-i18n.lv.noT = "Nevar atrast T";
+
 
 // ──────────────────────────────────────────────
 // 2) Palette for impossible (64 unique hues)
@@ -831,7 +877,7 @@ const searchFixation = {
   stimulus: '<div style="font-size:48px;">+</div>',
   choices: 'NO_KEYS',
   response_ends_trial: false,
-  trial_duration: () => 500 + Math.random() * 500
+  trial_duration: () => 1000
 };
 
 // ──────────────────────────────────────────────
@@ -841,7 +887,7 @@ function makeSearchBlock(cond) {
   const size      = 8;
   const total     = size * size;    // 64
   const noTIndex  = total;          // sentinel for “I can’t find T”
-  const absentProb  = 0.2;             // 20% of trials have no T
+  const absentProb  = 0;             // 20% of trials have no T
   const targetPresent = Math.random() > absentProb;
     // if present, pick a random cell; if absent, null
     const targetIdx   = targetPresent
@@ -874,7 +920,7 @@ function makeSearchBlock(cond) {
   });
 
   // 2) Build the No-T button HTML (in the prompt)
-  const noTbtnHTML = `<button id="noTbtn" class="jspsych-btn">${i18n[lang].noT}</button>`;
+  //const noTbtnHTML = `<button id="noTbtn" class="jspsych-btn">${i18n[lang].noT}</button>`;
 
   // 3) Return one trial that shows the grid + prompt
   return [
@@ -888,7 +934,13 @@ function makeSearchBlock(cond) {
       button_layout: 'grid',
       grid_columns: size,
       trial_css_class: 'search-grid',
-      prompt: noTbtnHTML,        // renders our single No-T button underneath
+      //prompt: noTbtnHTML,        // renders our single No-T button underneath
+
+      // ← instead of a fixed string, use a function to build it now
+      prompt: () => {
+        return `<button id="noTbtn" class="jspsych-btn">${i18n[lang].noT}</button>`;
+      },      
+
       data: {
         task:         'search',
         difficulty:   cond.label,
@@ -1005,7 +1057,11 @@ const showSearchSummary = {
   choices: 'ALL_KEYS'
 };
 
-const goodbye    = { type: htmlButtonResponse, stimulus: () =>`<h3>${i18n[lang].thanks}</h3>`, choices: () =>['${i18n[lang].exit}'] };
+const goodbye = {
+  type: htmlButtonResponse,
+  stimulus: () => `<h3>${i18n[lang].thanks}</h3>`,
+  choices: () => [ i18n[lang].exit ]
+};
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
 // ─── Feedback form ────────────────────────────────────
@@ -1079,25 +1135,55 @@ const saveData = {
     // aggregate
     const agg = {};
 
+    // ─── Aggregate present-T trials by difficulty & set_size ─────────────
+    const presentAgg = {};
+    // accumulator for No-T trials
+    const noTAgg = { difficulty: 'No T', set_size: null, rts: [], corrects: [] };
+
     searchTrials.forEach(tr => {
+      if (tr.target_present) {
+        // group by difficulty & set_size
         const key = `${tr.difficulty}|${tr.set_size}`;
-        agg[key] = agg[key] || { difficulty: tr.difficulty, set_size: tr.set_size, rts: [], corrects: [] };
-        agg[key].rts.push(tr.rt);
-        //agg[key].corrects.push(tr.correct ? 1 : 0);
-          // new: count as correct if either
-          //   a) target was present and user clicked it, OR
-          //   b) target was absent and user clicked “No T”
-        const wasCorrect = tr.target_present
-          ? tr.correct
-          : tr.noT_selected;
-        agg[key].corrects.push(wasCorrect ? 1 : 0);
-      });
-      const summaries = Object.values(agg).map(g => ({
-        difficulty: g.difficulty,
-        set_size:   g.set_size,
-        avg_rt:     +(g.rts.reduce((a,b)=>a+b,0)/g.rts.length).toFixed(2),
-        accuracy:   +((g.corrects.reduce((a,b)=>a+b,0)/g.corrects.length)*100).toFixed(1)
-      }));;
+        if (!presentAgg[key]) {
+          presentAgg[key] = {
+            difficulty: tr.difficulty,
+            set_size: tr.set_size,
+            rts: [],
+            corrects: []
+          };
+        }
+        presentAgg[key].rts.push(tr.rt);
+        presentAgg[key].corrects.push(tr.correct ? 1 : 0);
+      } else {
+        // all No-T trials go here
+        noTAgg.rts.push(tr.rt);
+        noTAgg.corrects.push(tr.noT_selected ? 1 : 0);
+      }
+    });
+
+    // ─── Build summaries for present-T conditions ─────────────────────────
+    const presentSummaries = Object.values(presentAgg).map(g => ({
+      difficulty:     g.difficulty,
+      set_size:       g.set_size,
+      target_present: true,
+      avg_rt:         +(g.rts.reduce((a, b) => a + b, 0) / g.rts.length).toFixed(2),
+      accuracy:       +((g.corrects.reduce((a, b) => a + b, 0) / g.corrects.length) * 100).toFixed(1)
+    }));
+
+    // ─── Build summary for No-T condition ────────────────────────────────
+    const noTSummary = {
+      difficulty:     'No T',
+      set_size:       null,
+      target_present: false,
+      avg_rt:         +(noTAgg.rts.reduce((a, b) => a + b, 0) / noTAgg.rts.length).toFixed(2),
+      accuracy:       +((noTAgg.corrects.reduce((a, b) => a + b, 0) / noTAgg.corrects.length) * 100).toFixed(1)
+    };
+
+    // ─── Combine all summaries ────────────────────────────────────────────
+    const summaries = [
+      ...presentSummaries,
+      noTSummary
+    ];
 
 
       // ─── Gather demographics from each mini‐form ────────────────────────────
@@ -1157,7 +1243,7 @@ const saveData = {
           comments:      fbRec.response.comments || ""
         };
 
-
+      
       const payload = {
         sessionID,
         lang,

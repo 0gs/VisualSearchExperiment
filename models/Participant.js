@@ -43,10 +43,11 @@ const SearchSchema = new mongoose.Schema({
 
 // Schema for summarized search performance
 const SummarySchema = new mongoose.Schema({
-  difficulty:      { type: String, required: true },
-  set_size:        { type: Number, required: true },
-  avg_rt:          { type: Number, required: true },
-  accuracy:        { type: Number, required: true }
+  difficulty:     { type: String,  required: true },
+  set_size:       { type: Number,  default: null },        // now optional
+  target_present: { type: Boolean, required: true },      // NEW: distinguishes “No T” from “with T”
+  avg_rt:         { type: Number,  required: true },
+  accuracy:       { type: Number,  required: true }
 }, { _id: false });
 
 // Schema for feedback responses
