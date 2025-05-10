@@ -143,7 +143,7 @@ const i18n = {
         "Visual search tasks (find and click on the “T” symbol)."
       ],
     titlePageDurationHeading: "How long will it take?",
-    titlePageDuration: "Approximately 10–20 minutes.",
+    titlePageDuration: "Approximately 10–15 minutes.",
     titlePageDeviceHeading: "Which devices are supported?",
     titlePageDevice: "Please use a desktop or laptop computer. Mobile devices are not supported.",
     titlePageAnonymityHeading: "Are the collected data anonymous?",
@@ -304,7 +304,7 @@ submitFeedback: "Submit"
       "Vizuālās meklēšanas uzdevumi (atrodiet un noklikšķiniet uz simbola “T”)."
     ],
     titlePageDurationHeading: "Cik daudz laika tas aizņems?",
-    titlePageDuration: "Aptuveni 10–20 minūtes.",
+    titlePageDuration: "Aptuveni 10–15 minūtes.",
     titlePageDeviceHeading: "Kādām ierīcēm ir paredzēti šie uzdevumi?",
     titlePageDevice: "Lūdzu, izmantojiet stacionāro datoru vai klēpjdatoru. Mobilās ierīces nav atbalstītas.",
     titlePageAnonymityHeading: "Vai iegūtie dati ir anonīmi?",
@@ -1020,7 +1020,7 @@ function makeSearchBlock(cond) {
 // ──────────────────────────────────────────────
 let blocks = [];
 searchConditions.forEach(cond => {
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 6; i++) {
     blocks.push(makeSearchBlock(cond));
   }
 });
