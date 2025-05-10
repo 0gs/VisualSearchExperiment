@@ -129,7 +129,7 @@ const i18n = {
     practiceTitle: "Practice Exercises (3)",
     practiceInfo:            "No data will be saved for these exercises.",
     practiceBeginPrompt:     "Press any key to start.",
-    practiceCompleteMessage: "Practice complete! The real visual search test will start now.",
+    practiceCompleteMessage: "<strong>Practice complete! The real visual search test will start now.</strong>",
     practiceContinuePrompt:  "Press any key to continue.",
     practiceDesc: "No data will be saved for these exercises.",
     practiceDone: "Practice complete! The real visual search test will start now.",
@@ -194,7 +194,7 @@ const i18n = {
         agePrompt:               "Please enter your age:",
     
         hobbiesPrompt:           "Which of the following activities do you regularly engage in?",
-        hobbiesPrompt2:           "Select 3 activities...",
+        hobbiesPrompt2:           "Select 1 activity",
         hobbiesOtherPlaceholder: "If Other, please specify…",
     
         // Generic
@@ -351,7 +351,7 @@ submitFeedback: "Submit"
     agePrompt:               "Lūdzu, ievadiet savu vecumu:",
 
     hobbiesPrompt:           "Kuras no šīm aktivitātēm Jūs veicat regulāri?",
-    hobbiesPrompt2:           "Izvēlieties 3 aktivitātes...",
+    hobbiesPrompt2:           "Izvēlieties 1 aktivitāti",
     hobbiesOtherPlaceholder: "Ja “Cits”, lūdzu ievadiet…",
 
     hobbyVideoGaming:        "Videospēles",
@@ -368,7 +368,7 @@ submitFeedback: "Submit"
     practiceTitle:           "Iesildīšanās mēģinājumi (5)",
     practiceInfo:            "Dati par šiem uzdevumiem netiks saglabāti.",
     practiceBeginPrompt:     "Nospiediet jebkuru taustiņu, lai sāktu.",
-    practiceCompleteMessage: "Iesildīšanās pabeigta! Tagad sākas īstais vizuālās meklēšanas tests.",
+    practiceCompleteMessage: "<strong>Iesildīšanās pabeigta! Tagad sākas īstais vizuālās meklēšanas tests.</strong> ",
     practiceContinuePrompt:  "Nospiediet jebkuru taustiņu, lai turpinātu.",
     practiceFeedbackCorrectTitle:    "✅ Pareizi!",
     practiceFeedbackIncorrectTitle:  "❌ Nepareizi, lūdzu noklikšķiniet uz simbola T.",
@@ -767,7 +767,7 @@ function makePracticeSegment(colors, size, difficultyLabel) {
     // ready screen
     {
       type: htmlKeyboardResponse,
-      stimulus: `<p>${i18n[lang].findT}</p><p>${i18n[lang].ready}</p>`,
+      stimulus: () => `<p>${i18n[lang].findT}</p><p>${i18n[lang].ready}</p>`,
       choices: 'ALL_KEYS'
     },
     // countdown
@@ -887,7 +887,7 @@ function makeSearchBlock(cond) {
   const size      = 8;
   const total     = size * size;    // 64
   const noTIndex  = total;          // sentinel for “I can’t find T”
-  const absentProb  = 0;             // 20% of trials have no T
+  const absentProb  = 0.2;             // 20% of trials have no T
   const targetPresent = Math.random() > absentProb;
     // if present, pick a random cell; if absent, null
     const targetIdx   = targetPresent
@@ -900,6 +900,11 @@ function makeSearchBlock(cond) {
     cellColors = jsPsych.randomization
       .sampleWithoutReplacement(impossiblePalette, total);
   }
+
+  // grab the exact color that will become the “T” in this trial
+ const thisTargetColor = cond.label === 'impossible'
+   ? cellColors[targetIdx]
+  : cond.targetColor;
 
   // 1) Build the 64 grid‐cell HTML strings
   const gridChoices = Array.from({ length: total }, (_, i) => {
@@ -946,7 +951,8 @@ function makeSearchBlock(cond) {
         difficulty:   cond.label,
         set_size:     size,
         target_present: targetPresent,
-        target_index:   targetIdx
+        target_index:   targetIdx,
+        target_color:   thisTargetColor    // ← NEW: save the exact hue here
       },
       on_start: trial => {
         // record start time for both grid clicks & No-T
@@ -1014,7 +1020,7 @@ function makeSearchBlock(cond) {
 // ──────────────────────────────────────────────
 let blocks = [];
 searchConditions.forEach(cond => {
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 1; i++) {
     blocks.push(makeSearchBlock(cond));
   }
 });

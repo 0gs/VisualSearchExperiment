@@ -24,6 +24,8 @@ const SearchSchema = new mongoose.Schema({
   target_row:      { type: Number },
   target_col:      { type: Number },
 
+  target_color:    { type: String },     // exact hue used for the “T” on this trial
+
   rt:              { type: Number, required: true },
   response:        { type: mongoose.Schema.Types.Mixed, required: true },
   response_label:  { type: String },
