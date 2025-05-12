@@ -70,7 +70,9 @@ const ParticipantSchema = new mongoose.Schema({
     hobbies:      { type: [String], default: [] },  // array of selections
     hobbiesOther:      { type: String },
     dailyComputerTime: { type: String },
-    residence:         { type: String }
+    residence:         { type: String },
+    hand:    { type: String, enum: ['right','left'] },
+    colorVision:   { type: String, enum: ['yes','no','unsure'] }
   },
   reaction_trials: [ ReactionSchema ],
   search_trials:   [ SearchSchema ],

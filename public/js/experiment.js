@@ -38,7 +38,7 @@ if (isMobile) {
     This experiment was designed for a computer with keyboard and mouse.
   </p>
   <p  style="font-size: 50px; margin: 0.5em 0;">
-    Šis eksperiments ir paredzēts datoram ar klavietūru un peli.
+    Šis eksperiments ir paredzēts datoram ar tastatūru un peli.
   </p>
 `;
   document.body.appendChild(overlay);
@@ -237,7 +237,7 @@ submitFeedback: "Submit"
     languagePrompt: "Izvēlieties valodu:",
     welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
     begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
-    reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru klavietūras taustiņu, kad redzat 'X'.",
+    reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru tastatūras taustiņu, kad redzat 'X'.",
     findT: "Atrodiet burtu <strong>T</strong>",
     ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
     avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
@@ -300,7 +300,7 @@ submitFeedback: "Submit"
     titlePageWelcome: "Laipni lūdzam! Jūs esat aicināts piedalīties Latvijas Universitātes Datorzinātnes studiju programmas 4. kursa studenta bakalaura darba pētījumā.",
     titlePageTasksHeading: "Kādi uzdevumi ir paredzēti?",
     titlePageTasksList: [
-      "Reakcijas laika tests (nospiediet jebkuru klavietūras taustiņu, kad redzat simbolu “X”).",
+      "Reakcijas laika tests (nospiediet jebkuru tastatūras taustiņu, kad redzat simbolu “X”).",
       "Vizuālās meklēšanas uzdevumi (atrodiet un noklikšķiniet uz simbola “T”)."
     ],
     titlePageDurationHeading: "Cik daudz laika tas aizņems?",
@@ -591,6 +591,74 @@ const residenceForm = {
   button_label: () => i18n[lang].continue
 };
 
+
+i18n.en.handednessPrompt = "Are you right-handed or left-handed?";
+i18n.lv.handednessPrompt = "Vai esat labrocīgs vai kreisrocīgs?";
+i18n.en.rightHanded      = "Right-handed";
+i18n.lv.rightHanded      = "Labrocīgs";
+i18n.en.leftHanded       = "Left-handed";
+i18n.lv.leftHanded       = "Kreisrocīgs";
+
+const handForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-hand' },
+  html: () => `
+  <p>
+    <strong>${i18n[lang].handednessPrompt}</strong><br/>
+    <label>
+      <input type="radio" name="handedness" value="right" required>
+      ${i18n[lang].rightHanded}
+    </label>
+    <label style="margin-left:1em;">
+      <input type="radio" name="handedness" value="left">
+      ${i18n[lang].leftHanded}
+    </label>
+  </p>
+  `,
+  button_label: () => i18n[lang].continue
+};
+
+
+i18n.en.colorVisionPrompt = "Do you have a color-vision disorder?";
+i18n.lv.colorVisionPrompt = "Vai Jums ir krāsu redzes traucējumi?";
+i18n.en.colorVisionYes    = "Yes";
+i18n.lv.colorVisionYes    = "Jā";
+i18n.en.colorVisionNo     = "No";
+i18n.lv.colorVisionNo     = "Nē";
+i18n.en.colorVisionUnsure = "I’m not sure";
+i18n.lv.colorVisionUnsure = "Nezinu";
+
+i18n.en.colorVisionHelp   =
+  `If you're not sure what color-vision disorders are, you can  
+   <a href="https://www.colorlitelens.com/ishihara-test.html" target="_blank">take this Ishihara test</a>.`;
+i18n.lv.colorVisionHelp   =
+  `Ja neesat pārliecināts, kas ir krāsu redzes traucējumi,  
+   varat <a href="https://www.colorlitelens.com/ishihara-test.html" target="_blank">veikt šo Ishihara testu</a>.`;
+
+
+const visionForm = {
+  type: surveyHtmlForm,
+  data: { task: 'demographics-vision' },
+  html: () => `
+  <p>
+    <strong>${i18n[lang].colorVisionPrompt}</strong><br/>
+    <label>
+      <input type="radio" name="colorVision" value="yes" required>
+      ${i18n[lang].colorVisionYes}
+    </label><br/>
+    <label>
+      <input type="radio" name="colorVision" value="no">
+      ${i18n[lang].colorVisionNo}
+    </label><br/>
+    <label>
+      <input type="radio" name="colorVision" value="unsure">
+      ${i18n[lang].colorVisionUnsure}
+    </label>
+  </p>
+  <p>${i18n[lang].colorVisionHelp}</p>
+  `,
+  button_label: () => i18n[lang].continue
+};
 
 // ──────────────────────────────────────────────
 // 1) Your unchanged intro & countdown
@@ -1223,6 +1291,18 @@ const saveData = {
       .filter({ task: 'demographics-residence' })
       .values()[0] || { response: {} };
 
+      // 6) Hands
+      const handRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-hand' })
+      .values()[0] || { response: {} };
+
+      // 7) Vision
+      const visRec = jsPsych.data
+      .get()
+      .filter({ task: 'demographics-vision' })
+      .values()[0] || { response: {} };
+
       // ─── Compose single demographics object ────────────────────────────────
       const demographics = {
       gender:            genderRec.response.gender || null,
@@ -1232,9 +1312,10 @@ const saveData = {
                           : [hobbyRec.response.hobbies].filter(Boolean),
       hobbiesOther:      hobbyRec.response.hobbiesOther || "",
       dailyComputerTime: compRec.response.computerTime || null,
-      residence:         resRec.response.residence || null
+      residence:         resRec.response.residence || null,
+      hand:              handRec.handedness || null,
+      colorVision:       visRec.colorVision || null
       };
-
 
       // 4) feedback
       // 4) grab the feedback response
@@ -1271,17 +1352,17 @@ jsPsych.run([
   languageScreen,
   //welcome,
   titlePage,
-  genderForm,
-  ageForm,
-  hobbiesForm,
-  computerTimeForm,   // ← new
-  residenceForm,      // ← new
   reactionBlock,
   //showBaseline,
   ...practiceTimeline,
   ...searchSegments,
   //showSearchSummary,
   feedbackForm,
+  genderForm,
+  ageForm,
+  hobbiesForm,
+  computerTimeForm,   // ← new
+  residenceForm,      // ← new
   saveData,    // ← data‐posting here
   goodbye,
   finalThanks
