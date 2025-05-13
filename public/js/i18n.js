@@ -177,7 +177,7 @@ export const i18n = {
         languagePrompt: "Izvēlieties valodu:",
         welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
         begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
-        reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru tastatūras taustiņu, kad redzat simbolu 'X'.",
+        reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru tastatūras taustiņu, kad redzat 'X'.",
         findT: "Atrodiet burtu <strong>T</strong>",
         ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
         avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
