@@ -71,13 +71,19 @@ const ParticipantSchema = new mongoose.Schema({
     hobbiesOther:      { type: String },
     dailyComputerTime: { type: String },
     residence:         { type: String },
-    hand:    { type: String, enum: ['right','left'] },
+    hand:    { type: String, enum: ['right','left', 'both'] },
     colorVision:   { type: String, enum: ['yes','no','unsure'] }
   },
   reaction_trials: [ ReactionSchema ],
   search_trials:   [ SearchSchema ],
   summaries:       [ SummarySchema ],
   feedback:        FeedbackSchema,
+
+  userAgent:    { type: String },
+  screenWidth:  { type: Number },
+  screenHeight: { type: Number },
+  finishedAt:   { type: Date },
+
   createdAt:       { type: Date, default: Date.now }
 });
 
