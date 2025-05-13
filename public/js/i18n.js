@@ -3,7 +3,7 @@ export const i18n = {
         languagePrompt: "Select your preferred language",
         welcome: "Welcome to the Visual Search Experiment",
         begin: "Press any key to begin.",
-        reactionInstr: "You'll see a '+' then a green 'X'. Press SPACE when you see 'X'.",
+        reactionInstr: "You'll see a '+' then a green 'X'. Press ANY KEY on the keyboard when you see 'X'.",
         findT: "Find the letter <strong>T</strong>",
         ready: "Press any key when ready.",
         avgRT: l => `Your avg. reaction time: <strong>${l} ms</strong>`,
@@ -37,7 +37,7 @@ export const i18n = {
         <p>You are invited to participate in a study for a Bachelor's thesis at [Your University].</p>
         <h3>What will you do?</h3>
         <ul>
-            <li>A simple reaction time test (press spacebar when you see "X").</li>
+            <li>A simple reaction time test (press ANY KEY when you see "X").</li>
             <li>A visual search task (find and click the letter "T").</li>
         </ul>
         <h3>How long will it take?</h3>
@@ -177,7 +177,7 @@ export const i18n = {
         languagePrompt: "Izvēlieties valodu:",
         welcome: "Laipni lūdzam vizuālajā meklēšanas testā",
         begin: "Nospiediet jebkuru taustiņu, lai sāktu.",
-        reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru tastatūras taustiņu, kad redzat 'X'.",
+        reactionInstr: "Jūs redzēsiet '+' un pēc tam simbolu 'X'. Nospiediet jebkuru tastatūras taustiņu, kad redzat simbolu 'X'.",
         findT: "Atrodiet burtu <strong>T</strong>",
         ready: "Nospiediet jebkuru taustiņu, kad esat gatavs.",
         avgRT: l => `Vid. reakcijas laiks: <strong>${l} ms</strong>`,
