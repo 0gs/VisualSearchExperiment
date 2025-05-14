@@ -145,6 +145,19 @@ const titlePage = {
 };
 
 
+// at the very top of experiment.js, before jsPsych.run…
+const params = new URLSearchParams(window.location.search);
+const prolificPID   = params.get('PROLIFIC_PID');  // e.g. '5f7a2b3c...'
+const prolificStudy = params.get('STUDY_ID');      // your Prolific study ID
+const prolificSess  = params.get('SESSION_ID');    // the Prolific session token
+
+// make them part of every trial record:
+jsPsych.data.addProperties({
+  prolificPID,
+  prolificStudy,
+  prolificSess
+});
+
 
 const welcome = {
   type: htmlKeyboardResponse,
@@ -848,6 +861,20 @@ const goodbye = {
   stimulus: () => `<h3>${i18n[lang].thanks}</h3>`,
   choices: () => [ i18n[lang].exit ]
 };
+
+const completionCode = "CYAJMH2E";  // the code on Prolific
+
+const finalScreen = {
+  type: htmlButtonResponse,
+  stimulus: `<h3>Click below to finish your study on Prolific!</h3>`,
+  choices: ['Submit to Prolific'],
+  button_html: (choice) => `<button class="jspsych-btn">${choice}</button>`,
+  on_finish: () => {
+    window.location.href = 
+      `https://app.prolific.co/submissions/complete?cc=${completionCode}`;
+  }
+};
+
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
 // ─── Feedback form ────────────────────────────────────
@@ -1050,6 +1077,9 @@ const saveData = {
       const payload = {
         sessionID,
         lang,
+        prolificPID,
+        prolificStudy,
+        prolificSess,
         demographics,
         reaction_trials: reactionTrials,
         search_trials:   searchTrials,
@@ -1074,20 +1104,21 @@ jsPsych.run([
   goFullScreen,
   //welcome,
   titlePage,
-  reactionBlock,
-  //showBaseline,
-  ...practiceTimeline,
-  ...searchSegments,
-  //showSearchSummary,
-  feedbackForm,
-  genderForm,
-  ageForm,
-  handForm,
-  visionForm,
-  hobbiesForm,
-  computerTimeForm,   // ← new
-  residenceForm,      // ← new
-  saveData,    // ← data‐posting here
-  goodbye,
-  finalThanks
+   reactionBlock,
+  // //showBaseline,
+   ...practiceTimeline,
+   ...searchSegments,
+  // //showSearchSummary,
+   feedbackForm,
+   genderForm,
+   ageForm,
+   handForm,
+   visionForm,
+   hobbiesForm,
+   computerTimeForm,   // ← new
+   residenceForm,      // ← new
+   saveData,    // ← data‐posting here
+   finalScreen, // for prolific
+   goodbye,
+   finalThanks
 ]);

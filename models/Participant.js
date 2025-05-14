@@ -64,6 +64,10 @@ const FeedbackSchema = new mongoose.Schema({
 const ParticipantSchema = new mongoose.Schema({
   sessionID:       { type: String, required: true, unique: true },
   lang:            { type: String, required: true },
+  // ← NEW: store the Prolific params
+  prolificPID:     { type: String, default: null },
+  prolificStudy:   { type: String, default: null },
+  prolificSess:    { type: String, default: null },
   demographics:    {
     gender:            { type: String },
     age:               { type: Number },
