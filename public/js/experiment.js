@@ -870,8 +870,11 @@ const finalScreen = {
   choices: ['Submit to Prolific'],
   button_html: (choice) => `<button class="jspsych-btn">${choice}</button>`,
   on_finish: () => {
-    window.location.href = 
-      `https://app.prolific.co/submissions/complete?cc=${completionCode}`;
+    // opens the Prolific completion URL in a new tab
+    window.open( 
+      `https://app.prolific.co/submissions/complete?cc=${completionCode}`,
+      "_blank"
+      );
   }
 };
 
