@@ -105,6 +105,20 @@ const languageScreen = {
   }
 };
 
+// Create a “go full-screen” Trial
+const goFullScreen = {
+  type: callFunction,
+  func: () => {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen();
+    } else if (docEl.webkitRequestFullscreen) { /* Safari */
+      docEl.webkitRequestFullscreen();
+    } else if (docEl.msRequestFullscreen) { /* IE11 */
+      docEl.msRequestFullscreen();
+    }
+  }
+};
 
 const titlePage = {
   type: htmlButtonResponse,
@@ -1057,6 +1071,7 @@ const saveData = {
 // ─── Run the timeline ───────────────────────────
 jsPsych.run([
   languageScreen,
+  goFullScreen,
   //welcome,
   titlePage,
   reactionBlock,
