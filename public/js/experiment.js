@@ -1121,7 +1121,7 @@ jsPsych.run([
    computerTimeForm,   // ← new
    residenceForm,      // ← new
    saveData,    // ← data‐posting here
-   finalScreen, // for prolific
+   //finalScreen, // for prolific
    goodbye,
    finalThanks
 ]);
