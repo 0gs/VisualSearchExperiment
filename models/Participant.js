@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-// Schema for reaction-time trials
+// Reakcijas laika mēģinājumi
 const ReactionSchema = new mongoose.Schema({
   task:            { type: String, required: true },
-  rt:              { type: Number, required: true },
+  rt:              { type: Number, required: true },  // Reakcijas laiks milisekundēs
   stimulus:        { type: String },
   response:        { type: mongoose.Schema.Types.Mixed },
   trial_type:      { type: String },
@@ -14,45 +14,41 @@ const ReactionSchema = new mongoose.Schema({
   correct:         { type: Boolean }
 }, { _id: false });
 
-// Schema for visual-search trials
+// Vizuālās meklēšanas mēģinājumi
 const SearchSchema = new mongoose.Schema({
   task:            { type: String, required: true },
   set_size:        { type: Number, required: true },
-  difficulty:      { type: String, required: true },
-  target_present:  { type: Boolean, required: true },       // ← NEW!
-  target_index:    { type: Number },                        // now optional if no T
-  target_row:      { type: Number },
-  target_col:      { type: Number },
-
-  target_color:    { type: String },     // exact hue used for the “T” on this trial
-
+  difficulty:      { type: String, required: true },  
+  target_present:  { type: Boolean, required: true }, 
+  target_index:    { type: Number },                  
+  target_row:      { type: Number },                 
+  target_col:      { type: Number },                 
+  target_color:    { type: String },                
   rt:              { type: Number, required: true },
   response:        { type: mongoose.Schema.Types.Mixed, required: true },
-  response_label:  { type: String },
+  response_label:  { type: String },                  
   noT_selected:    { type: Boolean, default: false },
-
-  clicked_index:   { type: Number },
+  clicked_index:   { type: Number },                  
   clicked_row:     { type: Number },
   clicked_col:     { type: Number },
-
   trial_type:      { type: String },
   trial_index:     { type: Number },
   plugin_version:  { type: String },
   time_elapsed:    { type: Number },
   lang:            { type: String },
-  correct:         { type: Boolean, required: true }
+  correct:         { type: Boolean, required: true }  // Vai atbilde bija pareiza
 }, { _id: false });
 
-// Schema for summarized search performance
+// Rezultātu kopsavilkums
 const SummarySchema = new mongoose.Schema({
-  difficulty:     { type: String,  required: true },
-  set_size:       { type: Number,  default: null },        // now optional
-  target_present: { type: Boolean, required: true },      // NEW: distinguishes “No T” from “with T”
-  avg_rt:         { type: Number,  required: true },
-  accuracy:       { type: Number,  required: true }
+  difficulty:     { type: String,  required: true },  // Sarežģītības līmenis
+  set_size:       { type: Number,  default: null },
+  target_present: { type: Boolean, required: true },  // Nosaka, vai T ir iekļauts
+  avg_rt:         { type: Number,  required: true },  // Vidējais reakcijas laiks
+  accuracy:       { type: Number,  required: true }   // Precizitāte procentos
 }, { _id: false });
 
-// Schema for feedback responses
+// Novērtējuma aptauja
 const FeedbackSchema = new mongoose.Schema({
   difficulty_rating: { type: Number, required: true, min: 1, max: 5 },
   easiest_combo: { type: String, required: true },
@@ -60,35 +56,32 @@ const FeedbackSchema = new mongoose.Schema({
   comments:      { type: String }
 }, { _id: false });
 
-// Main participant document
+// Demogrāfiskie un citi data par dalībnieku
 const ParticipantSchema = new mongoose.Schema({
-  sessionID:       { type: String, required: true, unique: true },
-  lang:            { type: String, required: true },
-  // ← NEW: store the Prolific params
-  prolificPID:     { type: String, default: null },
-  prolificStudy:   { type: String, default: null },
-  prolificSess:    { type: String, default: null },
+  sessionID:       { type: String, required: true, unique: true }, 
+  lang:            { type: String, required: true },       
+  
   demographics:    {
-    gender:            { type: String },
-    age:               { type: Number },
-    hobbies:      { type: [String], default: [] },  // array of selections
-    hobbiesOther:      { type: String },
-    dailyComputerTime: { type: String },
-    residence:         { type: String },
-    hand:    { type: String, enum: ['right','left', 'both'] },
-    colorVision:   { type: String, enum: ['yes','no','unsure'] }
+    gender:            { type: String },            
+    age:               { type: Number },             
+    hobbies:           { type: [String], default: [] }, 
+    hobbiesOther:      { type: String },           
+    dailyComputerTime: { type: String },      
+    residence:         { type: String },           
+    hand:              { type: String, enum: ['right','left', 'both'] },
+    colorVision:       { type: String, enum: ['yes','no','unsure'] }
   },
-  reaction_trials: [ ReactionSchema ],
-  search_trials:   [ SearchSchema ],
-  summaries:       [ SummarySchema ],
-  feedback:        FeedbackSchema,
-
-  userAgent:    { type: String },
-  screenWidth:  { type: Number },
-  screenHeight: { type: Number },
-  finishedAt:   { type: Date },
-
-  createdAt:       { type: Date, default: Date.now }
+  
+  reaction_trials: [ ReactionSchema ],            
+  search_trials:   [ SearchSchema ],                
+  summaries:       [ SummarySchema ],               
+  feedback:        FeedbackSchema,                  
+  
+  userAgent:       { type: String },               
+  screenWidth:     { type: Number },                 
+  screenHeight:    { type: Number },               
+  finishedAt:      { type: Date },                  
+  createdAt:       { type: Date, default: Date.now }  
 });
 
 export default mongoose.model('Participant', ParticipantSchema);

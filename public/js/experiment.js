@@ -1,8 +1,6 @@
-// ──────────────────────────────────────────────
 // experiment.js
-// ──────────────────────────────────────────────
 
-// ─── 1) Mobile‐check overlay first (ENG & LV) ────────────────────
+// Pirms eksperimenta - Mobilo telefonu pārbaude (ar tekstu LV & ENG)
 const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   .test(navigator.userAgent);
 
@@ -47,48 +45,41 @@ if (isMobile) {
     .addEventListener('click', () => overlay.remove());
 }
 
-
-// Imports
+// Visi importi
 import { initJsPsych } from 'https://esm.sh/jspsych@8.2.1';
 import htmlKeyboardResponse from 'https://esm.sh/@jspsych/plugin-html-keyboard-response@2.1.0';
 import surveyHtmlForm from 'https://esm.sh/@jspsych/plugin-survey-html-form@2.1.0';
 import htmlButtonResponse from 'https://esm.sh/@jspsych/plugin-html-button-response@2.1.0';
 import callFunction from 'https://esm.sh/@jspsych/plugin-call-function@2.1.0';
-import { escapeHtml, pick, postData } from './utils.js';
-
+import { pick, postData } from './utils.js';
 import { i18n } from './i18n.js';
 
-// ─── Prevent find/context menu ──────────────────
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') e.preventDefault();
 });
 document.addEventListener('contextmenu', e => e.preventDefault());
 
-// ─── Session & i18n setup ──────────────────────
 const sessionID = Date.now().toString() + '-' + Math.floor(Math.random() * 1e6);
 let lang = 'en';
-const API  = '/api/participants'; // ← your Express endpoint
+const API  = '/api/participants';
 
-// ─── Initialize jsPsych ─────────────────────────
+// jsPsych sāk darbu
 const jsPsych = initJsPsych({
   data: { sessionID },
-  //show_progress_bar: true,
-  //auto_update_progress_bar: true,
   on_start: () => {
-    //document.getElementById('bgm')?.play().catch(() => {});
     feather.replace();
   },
   plugins: { htmlKeyboardResponse, surveyHtmlForm, htmlButtonResponse, callFunction }
 });
-
-                     
-// ─── Attach global metadata to every trial ───────
+   
+// Pievieno klāt šos datus
 jsPsych.data.addProperties({
   userAgent:    navigator.userAgent,
   screenWidth:  window.screen.width,
   screenHeight: window.screen.height,
 });
 
+// Valodas izvēles skats (LV & ENG)
 const languageScreen = {
   type: surveyHtmlForm,
   data: { task: 'language' },
@@ -97,7 +88,6 @@ const languageScreen = {
     <p><label><input type="radio" name="lang" value="en" checked> English</label></p>
     <p><label><input type="radio" name="lang" value="lv"> Latviešu</label></p>
   `,
-  // force the button to read both English and Latvian
   button_label: `${i18n.en.continue} / ${i18n.lv.continue}`,
   on_finish: data => {
     lang = data.response.lang;
@@ -105,16 +95,16 @@ const languageScreen = {
   }
 };
 
-// Create a “go full-screen” Trial
+// Fullscreen mode
 const goFullScreen = {
   type: callFunction,
   func: () => {
     const docEl = document.documentElement;
     if (docEl.requestFullscreen) {
       docEl.requestFullscreen();
-    } else if (docEl.webkitRequestFullscreen) { /* Safari */
+    } else if (docEl.webkitRequestFullscreen) {
       docEl.webkitRequestFullscreen();
-    } else if (docEl.msRequestFullscreen) { /* IE11 */
+    } else if (docEl.msRequestFullscreen) {
       docEl.msRequestFullscreen();
     }
   }
@@ -144,27 +134,6 @@ const titlePage = {
   data: { trial_type: 'title', consent: 'I agree to participate' }
 };
 
-
-// at the very top of experiment.js, before jsPsych.run…
-const params = new URLSearchParams(window.location.search);
-const prolificPID   = params.get('PROLIFIC_PID');  // e.g. '5f7a2b3c...'
-const prolificStudy = params.get('STUDY_ID');      // your Prolific study ID
-const prolificSess  = params.get('SESSION_ID');    // the Prolific session token
-
-// make them part of every trial record:
-jsPsych.data.addProperties({
-  prolificPID,
-  prolificStudy,
-  prolificSess
-});
-
-
-const welcome = {
-  type: htmlKeyboardResponse,
-  stimulus: () => `<h2>${i18n[lang].welcome}</h2><p>${i18n[lang].begin}</p>`,
-  choices: "ALL_KEYS"
-};
-
 const introduction = {
   type: htmlButtonResponse,
   stimulus: () => i18n[lang].instructions,
@@ -173,13 +142,10 @@ const introduction = {
   choices: "ALL_KEYS"
 };
 
-
-// ─── 1) Gender screen ─────────────────────────
 const genderForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-gender' },
   preamble: () => `<h3>${i18n[lang].genderPrompt}</h3>`,
- // same here – return your html dynamically
   html: () => `
   <div>      
   <label>
@@ -199,7 +165,6 @@ const genderForm = {
   button_label: () => i18n[lang].continue
 };
 
-// ─── 2) Age screen ────────────────────────────
 const ageForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-age' },
@@ -210,7 +175,6 @@ const ageForm = {
   button_label: () => i18n[lang].continue
 };
 
-// ─── 3) Hobbies screen (pick exactly one) ────────────────────────
 const hobbiesForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-hobbies' },
@@ -259,7 +223,6 @@ const hobbiesForm = {
   on_load: () => {
     const otherRb  = document.getElementById('hobby-other-rb');
     const otherTxt = document.getElementById('hobby-other-txt');
-    // show the text‐field only when “Other” is checked
     document.querySelectorAll('input[name="hobbies"]').forEach(rb => {
       rb.addEventListener('change', () => {
         if (otherRb.checked) {
@@ -274,8 +237,6 @@ const hobbiesForm = {
   },
   button_label: () => i18n[lang].continue
 };
-
-
 
 const computerTimeForm = {
   type: surveyHtmlForm,
@@ -306,7 +267,6 @@ const residenceForm = {
         <select name="residence" required>
           <option value="" disabled selected>Select…</option>
           <option value="city">${i18n[lang].residenceCity}</option>
-          <option value="city">${i18n[lang].residenceCity2}</option>
           <option value="outside">${i18n[lang].residenceOutside}</option>
         </select>
       </label>
@@ -314,7 +274,6 @@ const residenceForm = {
   `,
   button_label: () => i18n[lang].continue
 };
-
 
 const handForm = {
   type: surveyHtmlForm,
@@ -363,9 +322,6 @@ const visionForm = {
   button_label: () => i18n[lang].continue
 };
 
-// ──────────────────────────────────────────────
-// 1) Your unchanged intro & countdown
-// ──────────────────────────────────────────────
 const reactionIntro = {
   type: htmlKeyboardResponse,
   stimulus: () => `<p>${i18n[lang].reactionInstr}</p><p>${i18n[lang].begin}</p>`,
@@ -374,32 +330,20 @@ const reactionIntro = {
 const reactionCountdown = [3,2,1].map(n => ({
   type: htmlKeyboardResponse,
   stimulus: `<p>${n}</p>`,
-  choices: [],            // no key accepted here
+  choices: [],
   trial_duration: 1500
 }));
 
-// ──────────────────────────────────────────────
-// 2) Fixation that RECORDS premature presses
-// ──────────────────────────────────────────────
 const fixationCheck = {
   type: htmlKeyboardResponse,
   stimulus: '<div style="font-size:48px;">+</div>',
-  choices: 'ALL_KEYS',            // listen for any key
+  choices: 'ALL_KEYS',
   trial_duration: () => 1000 + Math.random()*10000,
-  response_ends_trial: true,      // end on key or timeout
+  response_ends_trial: true,
   data: { phase: 'fixation' },
   on_finish: d => { d.premature = d.response !== null; }
 };
 
-i18n.en.tooSoonTitle  = "Too soon! Please wait for the “X” before responding.";
-i18n.en.tooSoonPrompt = "Press any key to retry this reaction.";
-
-i18n.lv.tooSoonTitle  = "Pārāk agri! Lūdzu, gaidiet “X” pirms atbildes.";
-i18n.lv.tooSoonPrompt = "Nospiediet jebkuru taustiņu, lai mēģinātu vēlreiz.";
-
-// ──────────────────────────────────────────────
-// 3) Warning if they pressed too soon
-// ──────────────────────────────────────────────
 const tooSoon = {
   type: htmlKeyboardResponse,
   stimulus: () => `
@@ -408,21 +352,14 @@ const tooSoon = {
   choices: 'ALL_KEYS'
 };
 
-
-// ──────────────────────────────────────────────
-// 4) The actual reaction trial
-// ──────────────────────────────────────────────
 const reactionTrial = {
   type: htmlKeyboardResponse,
   stimulus: '<div style="font-size:48px; color:black;">X</div>',
-  choices: 'ALL_KEYS',      // accept any key
+  choices: 'ALL_KEYS',
   response_ends_trial: true,
   data: { task: 'reaction' }
 };
 
-// ──────────────────────────────────────────────
-// 5) Progress screen after each success
-// ──────────────────────────────────────────────
 const reactionProgress = {
   type: htmlKeyboardResponse,
   stimulus: () => {
@@ -433,9 +370,6 @@ const reactionProgress = {
   choices: 'ALL_KEYS'
 };
 
-// ──────────────────────────────────────────────
-// 6) One “unit” that loops on premature
-// ──────────────────────────────────────────────
 const oneReaction = {
   timeline: [
     fixationCheck,
@@ -465,42 +399,20 @@ const oneReaction = {
       .filter({ phase: 'fixation' })
       .last(1)
       .values()[0];
-    return lastFix.premature;  // repeat if they pressed early
+    return lastFix.premature;
   }
 };
 
-// ──────────────────────────────────────────────
-// 7) Build 5 of these units in sequence
-// ──────────────────────────────────────────────
+// cik reakcijas testi
 const reactionBlock = {
   timeline: [
     reactionIntro,
     ...reactionCountdown,
-    // repeat oneReaction 5 times:
     ...Array.from({length:5}, () => [ oneReaction ]).flat()
   ]
 };
 
-
-const showBaseline = {
-    type: htmlKeyboardResponse,
-    stimulus: () => {
-      //console.log('⚙️ All trials so far:', jsPsych.data.get().values());
-      //console.log('⚙️ reactionTrials:', jsPsych.data.get().filter({task:'reaction'}).values());
-      //console.log('⚙️ searchingg:', jsPsych.data.get().filter({ task: 'search' }).values());
-      const recs = jsPsych.data.get().filter({task:'reaction'}).values();
-      const rts  = recs.map(r => r.rt);
-      const avg  = rts.length ? (rts.reduce((a,b)=>a+b)/rts.length).toFixed(2) : 'N/A';
-      return `<p>${i18n[lang].avgRT(avg)}</p><p>${i18n[lang].begin}</p>`;
-    },
-    choices: 'ALL_KEYS'
-  };
-  
-// ──────────────────────────────────────────────
-// PRACTICE: generate 3 random practice trials
-// ──────────────────────────────────────────────
-
-// 1) Build a list of all possible (colors, set_size, difficulty) combos
+// tikai priekš iesildīšanās
 const allSearchConds = [];
 [['black'], ['black','red'], ['red','blue','green']].forEach((colors, idx) => {
   const diff = ['easy','medium','hard'][idx];
@@ -509,17 +421,14 @@ const allSearchConds = [];
   });
 });
 
-// 2) Sample 3 of them without replacement
-// change amount of practice runs
+// cik iesildīšanās mēģinājumi
 const practiceConds = jsPsych.randomization.sampleWithoutReplacement(allSearchConds, 3);
 
-// 3) A “practice” version of makeSearchSegment
+// Lai izveidotu iesildīšanās mēģinājumus
 function makePracticeSegment(colors, size, difficultyLabel) {
-  // pick a random target
   const total     = size * size;
   const targetIdx = Math.floor(Math.random()*total);
 
-  // build the grid
   const choices = Array.from({length: total}, (_, i) => {
     const isT   = i===targetIdx;
     const symbol= isT ? 'T' : 'L';
@@ -535,20 +444,17 @@ function makePracticeSegment(colors, size, difficultyLabel) {
   });
 
   return [
-    // ready screen
     {
       type: htmlKeyboardResponse,
       stimulus: () => `<p>${i18n[lang].findT}</p><p>${i18n[lang].ready}</p>`,
       choices: 'ALL_KEYS'
     },
-    // countdown
     ...[3,2,1].map(x => ({
       type: htmlKeyboardResponse,
       stimulus: `<p>${x}</p>`,
       choices: [],
       trial_duration: 1500
     })),
-    // the grid button response
     {
       type: htmlButtonResponse,
       stimulus: '',
@@ -560,7 +466,6 @@ function makePracticeSegment(colors, size, difficultyLabel) {
         data.correct = (data.response === targetIdx);
       }
     },
-    // immediate feedback
     {
       type: htmlKeyboardResponse,
       stimulus: () => {
@@ -580,7 +485,7 @@ function makePracticeSegment(colors, size, difficultyLabel) {
   ];
 }
 
-// 4) Build the full practice timeline (3 trials)
+// Iesildīšanās mēģinājumi
 const practiceTimeline = [];
 practiceTimeline.push({
   type: htmlKeyboardResponse,
@@ -605,30 +510,19 @@ practiceTimeline.push({
   choices: 'ALL_KEYS'
 });
 
-
-
-// ──────────────────────────────────────────────
-// 1) Your 4 search conditions (unchanged)
-// ──────────────────────────────────────────────
+// Visi definētie sarežģītības līmeņi
 const searchConditions = [
-  { label: 'baseline',   targetColor: 'black', distractorColors: ['black'] },
-  { label: 'easy',       targetColor: 'red',   distractorColors: ['black'] },
-  { label: 'difficult',  targetColor: 'blue',  distractorColors: ['red','green'] },
-  { label: 'impossible', targetColor: null,    distractorColors: null }
+  { label: 'BlackT-1',   targetColor: 'black', distractorColors: ['black'] },
+  { label: 'RedT-2',       targetColor: 'red',   distractorColors: ['black'] },
+  { label: 'BlueT-3',  targetColor: 'blue',  distractorColors: ['red','green'] },
+  { label: 'UniqueT-64', targetColor: null,    distractorColors: null }
 ];
 
-
-
-// ──────────────────────────────────────────────
-// 2) Palette for impossible (64 unique hues)
-// ──────────────────────────────────────────────
-const impossiblePalette = Array.from({ length: 64 }, (_, i) =>
+// Krāsu palete priekš UniqueT-64
+const uniquePalette = Array.from({ length: 64 }, (_, i) =>
   `hsl(${Math.round(i * 360 / 64)},70%,50%)`
 );
 
-// ──────────────────────────────────────────────
-// 3) Shared intro, countdown & fixation
-// ──────────────────────────────────────────────
 const searchIntro = {
   type: htmlKeyboardResponse,
   stimulus: () => `<p>${i18n[lang].findT}</p><p>${i18n[lang].ready}</p>`,
@@ -651,45 +545,32 @@ const searchFixation = {
   trial_duration: () => 1000
 };
 
-// ──────────────────────────────────────────────
-// 4) Build one 8×8 search “block” with extra button
-// ──────────────────────────────────────────────
+// Lai izveidotu režģi ar pogu
 function makeSearchBlock(cond, targetPresent) {
   const size      = 8;
   const total     = size * size;    // 64
-  const noTIndex  = total;          // sentinel for “I can’t find T”
-  //const absentProb  = 0.2;             // 20% of trials have no T
-  //const targetPresent = Math.random() > absentProb;
-    // if present, pick a random cell; if absent, null
-  //  const targetIdx   = targetPresent
- //   ? Math.floor(Math.random() * total)
-  //  : null;
+  const noTIndex  = total;          // nevaru atrast T
 
   const targetIdx = targetPresent
     ? Math.floor(Math.random() * total)
     : null;
 
-
-
-
-  // (Optional) unique‐hue logic for “impossible” trials
   let cellColors = null;
-  if (cond.label === 'impossible') {
+  if (cond.label === 'UniqueT-64') {
     cellColors = jsPsych.randomization
-      .sampleWithoutReplacement(impossiblePalette, total);
+      .sampleWithoutReplacement(uniquePalette, total);
   }
 
-  // grab the exact color that will become the “T” in this trial
- const thisTargetColor = cond.label === 'impossible'
+ const thisTargetColor = cond.label === 'UniqueT-64'
    ? cellColors[targetIdx]
   : cond.targetColor;
 
-  // 1) Build the 64 grid‐cell HTML strings
+  // Definē režģi
   const gridChoices = Array.from({ length: total }, (_, i) => {
     const isT    = targetPresent && i === targetIdx;
     const symbol = isT ? 'T' : 'L';
     const rot    = isT ? 0 : pick([0, 90, 180, 270]);
-    const col    = cond.label === 'impossible'
+    const col    = cond.label === 'UniqueT-64'
       ? cellColors[i]
       : (isT ? cond.targetColor : pick(cond.distractorColors));
     return `<span style="
@@ -702,24 +583,19 @@ function makeSearchBlock(cond, targetPresent) {
     ">${symbol}</span>`;
   });
 
-  // 2) Build the No-T button HTML (in the prompt)
-  //const noTbtnHTML = `<button id="noTbtn" class="jspsych-btn">${i18n[lang].noT}</button>`;
-
-  // 3) Return one trial that shows the grid + prompt
+  // Izveido režģi ar pogu, ka nevar atrast T
   return [
     searchIntro,
     ...searchCountdown,
     searchFixation,
     {
       type: htmlButtonResponse,
-      stimulus: '',              // gridChoices become the buttons
+      stimulus: '',
       choices: gridChoices,
       button_layout: 'grid',
       grid_columns: size,
       trial_css_class: 'search-grid',
-      //prompt: noTbtnHTML,        // renders our single No-T button underneath
 
-      // ← instead of a fixed string, use a function to build it now
       prompt: () => {
         return `<button id="noTbtn" class="jspsych-btn">${i18n[lang].noT}</button>`;
       },      
@@ -730,28 +606,23 @@ function makeSearchBlock(cond, targetPresent) {
         set_size:     size,
         target_present: targetPresent,
         target_index:   targetIdx,
-        target_color:   thisTargetColor    // ← NEW: save the exact hue here
+        target_color:   thisTargetColor
       },
       on_start: trial => {
-        // record start time for both grid clicks & No-T
+        // Ja izvēlas, ka neatrada T
         trial._startTime = performance.now();
-        // attach the No-T click handler
         setTimeout(() => {
           const btn = document.getElementById('noTbtn');
           btn.onclick = () => {
             const rt = Math.round(performance.now() - trial._startTime);
             jsPsych.finishTrial({
-              // base data
               ...trial.data,
-              // sentinel response
               response:      noTIndex,
               rt,
               noT_selected:   true,
               response_label: i18n[lang].noT,
-              // target coords
               target_row:     Math.floor(targetIdx / size),
               target_col:     targetIdx % size,
-              // clicked (none)
               clicked_index:  null,
               clicked_row:    null,
               clicked_col:    null,
@@ -761,7 +632,7 @@ function makeSearchBlock(cond, targetPresent) {
         }, 0);
       },
       on_finish: data => {
-        // if they clicked a grid cell (response < 64)
+        // Ja izvēlas simbolu, nevis ka neatrada T
         if (data.response < total) {
 
           const clicked = data.response;
@@ -777,38 +648,22 @@ function makeSearchBlock(cond, targetPresent) {
           data.clicked_index  = clicked;
           data.clicked_row    = Math.floor(clicked / size);
           data.clicked_col    = clicked % size;
-          // plugin recorded data.rt automatically
           data.correct         = (
             targetPresent && clicked === targetIdx
           );
         }
-        // else: No-T case was fully handled in finishTrial above
       }
     }
   ];
 }
 
-
-
+// Definē ar T un bez T uzdevumu skaitu
 const runsPerCond    = 6;
 const noTRunsPerCond = 1;
-
-
-// ──────────────────────────────────────────────
-// 5) Create blocks, shuffle them, then flatten
-// ──────────────────────────────────────────────
 let blocks = [];
 
-/* searchConditions.forEach(cond => {
-  for (let i = 0; i < 6; i++) {
-    blocks.push(makeSearchBlock(cond));
-  }
-});
-blocks = jsPsych.randomization.shuffle(blocks);
-const searchSegments = blocks.flat(); */
-
 searchConditions.forEach(cond => {
-  // make exactly 1 absent + 5 present
+  // izveido 5 ar T un 1 bez T uzdevumus
   const flags = [
     ...Array(noTRunsPerCond).fill(false),
     ...Array(runsPerCond - noTRunsPerCond).fill(true)
@@ -819,42 +674,9 @@ searchConditions.forEach(cond => {
     });
 });
 
-// now shuffle **all** 24 trials together
+// Randomizē visus uzdevumus
 blocks = jsPsych.randomization.shuffle(blocks);
-// flatten to one long timeline
 const searchSegments = blocks.flat();
-
-
-const showSearchSummary = {
-  type: htmlKeyboardResponse,
-  stimulus: () => {
-    // grab only the true “search” trials
-    const recs = jsPsych.data.get().filter({ task: 'search' }).values();
-
-    // extract RTs and correctness arrays
-    const rts = recs
-      .map(r => r.rt)
-      .filter(rt => typeof rt === 'number' && !isNaN(rt));
-
-    const correctFlags = recs.map(r => r.correct ? 1 : 0);
-
-    // compute averages
-    const avg = rts.length
-      ? rts.reduce((sum, x) => sum + x, 0) / rts.length
-      : null;
-
-    const acc = correctFlags.length
-      ? (correctFlags.reduce((sum, x) => sum + x, 0) / correctFlags.length) * 100
-      : null;
-
-    // format for display
-    const avgStr = avg !== null ? avg.toFixed(2) : 'N/A';
-    const accStr = acc !== null ? acc.toFixed(1) : 'N/A';
-
-    return i18n[lang].avgSearch(avgStr, accStr);
-  },
-  choices: 'ALL_KEYS'
-};
 
 const goodbye = {
   type: htmlButtonResponse,
@@ -862,25 +684,9 @@ const goodbye = {
   choices: () => [ i18n[lang].exit ]
 };
 
-const completionCode = "CYAJMH2E";  // the code on Prolific
-
-const finalScreen = {
-  type: htmlButtonResponse,
-  stimulus: `<h3>Click below to finish your study on Prolific!</h3>`,
-  choices: ['Submit to Prolific'],
-  button_html: (choice) => `<button class="jspsych-btn">${choice}</button>`,
-  on_finish: () => {
-    // opens the Prolific completion URL in a new tab
-    window.open( 
-      `https://app.prolific.co/submissions/complete?cc=${completionCode}`,
-      "_blank"
-      );
-  }
-};
-
 const finalThanks = { type: htmlKeyboardResponse, stimulus:()=>`<p>${i18n[lang].endMessage}</p>`, choices:'NO_KEYS' };
 
-// ─── Feedback form ────────────────────────────────────
+// Vērtējumu aptauja
 const feedbackForm = {
   type: surveyHtmlForm,
   data: { task: 'feedback' },
@@ -905,10 +711,10 @@ const feedbackForm = {
       <label>${i18n[lang].feedbackColorLabel}
         <select name="colorEasiest" required>
           <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
-          <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
-          <option value="redBlack">${i18n[lang].colorOptRedBlack}</option>
-          <option value="blueRedBlack">${i18n[lang].colorOptBlueRedBlack}</option>
-          <option value="impossible">${i18n[lang].colorOptImpossible}</option>
+          <option value="BlackT-1">${i18n[lang].colorOptBlack}</option>
+          <option value="RedT-2">${i18n[lang].colorOptRedBlack}</option>
+          <option value="BlueT-3">${i18n[lang].colorOptBlueRedBlack}</option>
+          <option value="UniqueT-64">${i18n[lang].colorOptImpossible}</option>
           <option value="noT">${i18n[lang].noT}</option>
         </select>
       </label>
@@ -919,10 +725,10 @@ const feedbackForm = {
       <label>${i18n[lang].feedbackColorLabel2}
         <select name="colorHardest" required>
           <option value="" disabled selected>${i18n[lang].selectPlaceholder}</option>
-          <option value="blackOnly">${i18n[lang].colorOptBlack}</option>
-          <option value="redBlack">${i18n[lang].colorOptRedBlack}</option>
-          <option value="blueRedBlack">${i18n[lang].colorOptBlueRedBlack}</option>
-          <option value="impossible">${i18n[lang].colorOptImpossible}</option>
+          <option value="BlackT-1">${i18n[lang].colorOptBlack}</option>
+          <option value="RedT-2">${i18n[lang].colorOptRedBlack}</option>
+          <option value="BlueT-3">${i18n[lang].colorOptBlueRedBlack}</option>
+          <option value="UniqueT-64">${i18n[lang].colorOptImpossible}</option>
           <option value="noT">${i18n[lang].noT}</option>
         </select>
       </label>
@@ -938,27 +744,17 @@ const feedbackForm = {
   button_label: () => i18n[lang].submitFeedback
 };
 
-
-
-
-// ─── Step 2: Build payload inside saveData ─────
+// Sagatavo datus, lai tos nosūtītu datubāzei
 const saveData = {
   type: callFunction,
   func: () => {
-    // raw trial arrays
     const reactionTrials = jsPsych.data.get().filter({ task:'reaction' }).values();
     const searchTrials   = jsPsych.data.get().filter({ task:'search' }).values();
-    // aggregate
-    const agg = {};
-
-    // ─── Aggregate present-T trials by difficulty & set_size ─────────────
     const presentAgg = {};
-    // accumulator for No-T trials
     const noTAgg = { difficulty: 'No T', set_size: null, rts: [], corrects: [] };
 
     searchTrials.forEach(tr => {
       if (tr.target_present) {
-        // group by difficulty & set_size
         const key = `${tr.difficulty}|${tr.set_size}`;
         if (!presentAgg[key]) {
           presentAgg[key] = {
@@ -971,13 +767,12 @@ const saveData = {
         presentAgg[key].rts.push(tr.rt);
         presentAgg[key].corrects.push(tr.correct ? 1 : 0);
       } else {
-        // all No-T trials go here
         noTAgg.rts.push(tr.rt);
         noTAgg.corrects.push(tr.noT_selected ? 1 : 0);
       }
     });
 
-    // ─── Build summaries for present-T conditions ─────────────────────────
+    // All summaries (with T)
     const presentSummaries = Object.values(presentAgg).map(g => ({
       difficulty:     g.difficulty,
       set_size:       g.set_size,
@@ -986,7 +781,7 @@ const saveData = {
       accuracy:       +((g.corrects.reduce((a, b) => a + b, 0) / g.corrects.length) * 100).toFixed(1)
     }));
 
-    // ─── Build summary for No-T condition ────────────────────────────────
+    // No T summary
     const noTSummary = {
       difficulty:     'No T',
       set_size:       null,
@@ -995,57 +790,47 @@ const saveData = {
       accuracy:       +((noTAgg.corrects.reduce((a, b) => a + b, 0) / noTAgg.corrects.length) * 100).toFixed(1)
     };
 
-    // ─── Combine all summaries ────────────────────────────────────────────
     const summaries = [
       ...presentSummaries,
       noTSummary
     ];
 
-
-      // ─── Gather demographics from each mini‐form ────────────────────────────
-      // 1) Gender
       const genderRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-gender' })
       .values()[0] || { response: {} };
 
-      // 2) Age
       const ageRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-age' })
       .values()[0] || { response: {} };
 
-      // 3) Hobbies (checkboxes + optional Other text)
       const hobbyRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-hobbies' })
       .values()[0] || { response: {} };
 
-      // 4) Daily computer time
       const compRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-computerTime' })
       .values()[0] || { response: {} };
 
-      // 5) Residence
       const resRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-residence' })
       .values()[0] || { response: {} };
 
-      // 6) Hands
       const handRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-hand' })
       .values()[0] || { response: {} };
 
-      // 7) Vision
       const visRec = jsPsych.data
       .get()
       .filter({ task: 'demographics-vision' })
       .values()[0] || { response: {} };
 
-      // ─── Compose single demographics object ────────────────────────────────
+      // Demogrāfijas un pārējo dalībnieka datu objekts
       const demographics = {
       gender:            genderRec.response.gender || null,
       age:               parseInt(ageRec.response.age, 10) || null,
@@ -1059,8 +844,6 @@ const saveData = {
       colorVision:       visRec.response.colorVision || null
       };
 
-      // 4) feedback
-      // 4) grab the feedback response
       const fbRec = jsPsych.data.get()
         .filter({ task: 'feedback' })
         .values()[0] || { response: {} };
@@ -1080,48 +863,37 @@ const saveData = {
       const payload = {
         sessionID,
         lang,
-        prolificPID,
-        prolificStudy,
-        prolificSess,
         demographics,
         reaction_trials: reactionTrials,
         search_trials:   searchTrials,
         summaries,
         feedback,
-        // metadata
         userAgent,
         screenWidth,
         screenHeight,
         finishedAt
       };
-    // full payload
-    // POST to backend
-    //console.log('📤 Posting payload:', payload);
     postData(API, payload);
   }
 };
 
-// ─── Run the timeline ───────────────────────────
+// Eksperimenta gaita (timeline)
 jsPsych.run([
   languageScreen,
-  goFullScreen,
-  //welcome,
+ /*  goFullScreen,
   titlePage,
-   reactionBlock,
-  // //showBaseline,
+  reactionBlock,
    ...practiceTimeline,
-   ...searchSegments,
-  // //showSearchSummary,
+  ...searchSegments,
    feedbackForm,
    genderForm,
    ageForm,
    handForm,
    visionForm,
    hobbiesForm,
-   computerTimeForm,   // ← new
-   residenceForm,      // ← new
-   saveData,    // ← data‐posting here
-   //finalScreen, // for prolific
+   computerTimeForm, */
+   residenceForm,
+   saveData,
    goodbye,
    finalThanks
 ]);

@@ -1,10 +1,8 @@
-/* center the prompt (i.e. our extra button) */
 .jspsych-html-button-response-prompt {
     text-align: center;
     margin-top: 1rem;
   }
 
-/* ---------- Minimalistic White Theme ---------- */
 body {
   background: #ffffff !important;
   color: #222222 !important;
@@ -13,13 +11,12 @@ body {
   padding: 0;
 }
 
-/* Make the jspsych content wrapper plain and left-aligned */
 .jspsych-content-wrapper {
   background: #ffffff !important;
   border: none !important;
   box-shadow: none !important;
-  margin: 2rem auto;    /* controls horizontal centering of the whole block */
+  margin: 2rem auto;
   max-width: 800px;
   padding: 1rem;
-  text-align: left;     /* override any centering */
+  text-align: left;
 }

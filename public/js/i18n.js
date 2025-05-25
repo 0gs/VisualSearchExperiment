@@ -1,3 +1,5 @@
+// i18n.js
+
 export const i18n = {
   en: {
         languagePrompt: "Select your preferred language",
@@ -53,7 +55,8 @@ export const i18n = {
         <p>For questions, contact: [Your email]</p>
         `,
         continue: "Continue",
-        tooSoonTitle: "Too soon!",
+        tooSoonTitle: "Too soon! Please wait for the “X” before responding.",
+        tooSoonPrompt: "Press any key to retry this reaction.",
         tooSoonBody: "Please wait for the green “X” before responding.",
         reactionProgress: "Reaction time test {done} / 5 completed.",
         reactionReady: "Press any key when you’re ready for the next one.",
@@ -227,7 +230,8 @@ export const i18n = {
         <p>Jautājumu gadījumā sazinieties: georgssprucs@gmail.com</p>
         `,
         continue: "Turpināt",
-        tooSoonTitle: "Pārāk agri!",
+        tooSoonTitle: "Pārāk agri! Lūdzu, gaidiet “X” pirms atbildes.",
+        tooSoonPrompt: "Nospiediet jebkuru taustiņu, lai mēģinātu vēlreiz.",
         tooSoonBody: "Lūdzu, gaidiet zaļo “X” pirms atbildes.",
         reactionProgress: "Reakcijas laika tests {done} / 5 pabeigts.",
         reactionReady: "Nospiediet jebkuru taustiņu, kad esat gatavs nākamajam.",
