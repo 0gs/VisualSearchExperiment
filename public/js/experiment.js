@@ -880,7 +880,7 @@ const saveData = {
 // Eksperimenta gaita (timeline)
 jsPsych.run([
   languageScreen,
- /*  goFullScreen,
+  goFullScreen,
   titlePage,
   reactionBlock,
    ...practiceTimeline,
@@ -891,7 +891,7 @@ jsPsych.run([
    handForm,
    visionForm,
    hobbiesForm,
-   computerTimeForm, */
+   computerTimeForm,
    residenceForm,
    saveData,
    goodbye,
