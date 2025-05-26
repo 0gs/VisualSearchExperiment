@@ -134,14 +134,6 @@ const titlePage = {
   data: { trial_type: 'title', consent: 'I agree to participate' }
 };
 
-const introduction = {
-  type: htmlButtonResponse,
-  stimulus: () => i18n[lang].instructions,
-  choices: [ i18n[lang].continue ],
-  data: { trial_type: 'instructions' },
-  choices: "ALL_KEYS"
-};
-
 const genderForm = {
   type: surveyHtmlForm,
   data: { task: 'demographics-gender' },
